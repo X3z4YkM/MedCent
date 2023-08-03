@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import * as $ from 'jquery';
 import { UserService } from '../services/user.service';
+import { async } from '@angular/core/testing';
 
 @Component({
   selector: 'app-register',
@@ -40,7 +41,7 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit(): void {}
 
-  registerUser() {
+  async registerUser() {
     let flag = 0;
     let error_message = '';
 
@@ -182,7 +183,7 @@ export class RegisterComponent implements OnInit {
           password: password,
           street: street,
         };
-        this.userService.register(data_package).subscribe((response) => {
+        this.userService.register(data_package).subscribe(async (response) => {
           // error caused by 1)user alredy exists or server side error
           if (response['status'] == 400) {
             error_message = response['error_message'];
@@ -216,7 +217,9 @@ export class RegisterComponent implements OnInit {
             $('.popup-background').addClass('popup-active');
 
             if (this.file.length > 0) {
-              this.userService.upload_img(this.file, this.file_extension).subscribe((response) => {
+              //prepare img
+
+              this.userService.upload_img(await this.readImageFile(this.file_oup), this.file_extension).subscribe((response) => {
 
                 if(response['status']==200){
                   // picture is added redirect user to login page
@@ -249,21 +252,39 @@ export class RegisterComponent implements OnInit {
   }
   errorMessage: string;
 
-  onFileChange(event: any): void {
+  readImageFile(file) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+  
+      reader.onload = function (e) {
+        resolve(e.target.result);
+      };
+  
+      reader.onerror = function (e) {
+        reject(e.target.error);
+      };
+  
+      reader.readAsDataURL(file);
+    });
+  }
+  
+
+  onFileChange(event: any)  {
     const files = event.target.files as FileList;
 
     if (files.length > 0) {
       const file = files[0];
       const _file = URL.createObjectURL(files[0]);
       if (this.validateFileExtension(this.getFileExtension(files[0]['type']))) {
-        this.checkImageDimensions(_file, (dim_stmt) => {
+        this.checkImageDimensions(_file, async (dim_stmt) => {
           if (
             this.validateFileExtension(this.getFileExtension(file['type'])) &&
             dim_stmt
           ) {
             this.file = _file;
-            this.file_oup = file;
-            console.log(this.file_oup)
+            this.file_oup = files[0]
+            console.log(await this.readImageFile(this.file_oup))
+            
             this.resetInput();
           }
         });

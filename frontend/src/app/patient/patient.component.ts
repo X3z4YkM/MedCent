@@ -12,17 +12,18 @@ import * as $ from 'jquery';
 export class PatientComponent implements OnInit {
 
   constructor(private userService: UserService, private router: Router) { 
-    this.userService.get_img().subscribe((response) => {
-      console.log(response)
-      let img_src = JSON.parse(response["image"]);
+    $(document).ready(()=>{
 
-      console.log(img_src)
-      const b64 = Buffer.from(img_src["data"]).toString('base64');
-      const mimeType = 'image/png'; 
-      $("img").attr("src", `data:${mimeType}; base64,${b64}`);
+      this.userService.get_img().subscribe((response) => {
+        console.log(response)
+        let img_src = response["image"]
+        const uint8Array = new Uint8Array(img_src["data"]);
+        const base64String = btoa(String.fromCharCode(...uint8Array));
+        $("img").attr("src", `data:image/png;base64,${base64String}`);
+      
+      })
+        
     })
-    
-
   }
 
   ngOnInit(): void {

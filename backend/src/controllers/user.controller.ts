@@ -96,11 +96,10 @@ export class UserController{
 		const targetDir = '../srassets/profile_pictures/image.png';
 		const targetFileName = 'profile_image.' + extension;
 		const path_to_images = path.join(__dirname,`../../src/assets/profile_pictures/${username}.${extension}`)
-		//console.log(path_to_images)
-		let s = fs.readFileSync(imageSrc)
-		console.log(s)
-		fs.writeFileSync(path_to_images, imageSrc)
-		res.json({'something': imageSrc})
+		const base64Data = imageSrc.replace(/^data:image\/png;base64,/, '');
+		const imageBuffer = Buffer.from(base64Data, 'base64');
+		fs.writeFileSync(path_to_images, imageBuffer)
+		res.json({'something': imageBuffer})
 		
 	};
 
@@ -108,9 +107,9 @@ export class UserController{
 
 		let usrename = req.body.username
 		const path_to_images = path.join(__dirname,`../../src/assets/profile_pictures/misko123.png`)
-		let image = fs.readFileSync(path_to_images,'base64');
+		let image = fs.readFileSync(path_to_images);
 		res.json({
-			'image': JSON.stringify(image)
+			'image': image
 		})
 
 	}
