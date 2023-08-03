@@ -88,13 +88,33 @@ export class UserController{
 	  
 
 	set_profile_img = (req: express.Request, res: express.Response) => {
+	
+
 		const imageSrc = req.body.img_src;
 		const extension = req.body.extension;
-		const targetDir = 'assets/profile_pictures/';
+		let username = 'misko123'
+		const targetDir = '../srassets/profile_pictures/image.png';
 		const targetFileName = 'profile_image.' + extension;
-		res.json({'something': 200})
+		const path_to_images = path.join(__dirname,`../../src/assets/profile_pictures/${username}.${extension}`)
+		//console.log(path_to_images)
+		let s = fs.readFileSync(imageSrc)
+		console.log(s)
+		fs.writeFileSync(path_to_images, imageSrc)
+		res.json({'something': imageSrc})
 		
 	};
+
+	get_profile_img = (req: express.Request, res: express.Response) => {
+
+		let usrename = req.body.username
+		const path_to_images = path.join(__dirname,`../../src/assets/profile_pictures/misko123.png`)
+		let image = fs.readFileSync(path_to_images,'base64');
+		res.json({
+			'image': JSON.stringify(image)
+		})
+
+	}
+
 	  
 }
 

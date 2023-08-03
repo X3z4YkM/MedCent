@@ -14,5 +14,9 @@ userRouter.route('/img/save').post(
 	(req, res) => new UserController().set_profile_img(req, res)
 )
 
+userRouter.route('/img/get').get(
+	(req, res) => new UserController().get_profile_img(req, res)
+)
+
 
 export default userRouter

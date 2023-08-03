@@ -12,6 +12,8 @@ const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
 app.use(express_1.default.urlencoded({ extended: true }));
+app.use(express_1.default.raw({ "type": "image/jpeg" }));
+app.use(express_1.default.raw({ "type": "image/png" }));
 mongoose_1.default.connect('mongodb://localhost:27017/medicalcentar');
 const connection = mongoose_1.default.connection;
 connection.once('open', () => {

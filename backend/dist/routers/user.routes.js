@@ -9,5 +9,6 @@ const userRouter = express_1.default.Router();
 userRouter.route('/login').post((req, res) => new user_controller_1.UserController().login(req, res));
 userRouter.route('/register/patient').post((req, res) => new user_controller_1.UserController().register_patient(req, res));
 userRouter.route('/img/save').post((req, res) => new user_controller_1.UserController().set_profile_img(req, res));
+userRouter.route('/img/get').get((req, res) => new user_controller_1.UserController().get_profile_img(req, res));
 exports.default = userRouter;
 //# sourceMappingURL=user.routes.js.map

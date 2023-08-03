@@ -27,10 +27,16 @@ export class UserService{
 
   upload_img(img_src, file_extension){
     const data = {
-      img_src: img_src,
+      img_src: img_src.stream(),
       extension: file_extension
     }
     return this.http.post(`${this.uri}/users/img/save`, data);
+  }
+
+
+  get_img(){
+  
+    return this.http.get(`${this.uri}/users/img/get`);
   }
 
 }

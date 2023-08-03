@@ -8,7 +8,8 @@ const app = express()
 app.use(cors())
 app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: true }));
-
+app.use(express.raw({"type": "image/jpeg"}));
+app.use(express.raw({"type": "image/png"}));
 
 mongoose.connect('mongodb://localhost:27017/medicalcentar')
 

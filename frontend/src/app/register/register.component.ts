@@ -216,9 +216,6 @@ export class RegisterComponent implements OnInit {
             $('.popup-background').addClass('popup-active');
 
             if (this.file.length > 0) {
-              var form_data = new FormData();
-              var oFReader = new FileReader();
-
               this.userService.upload_img(this.file, this.file_extension).subscribe((response) => {
 
                 if(response['status']==200){
@@ -226,10 +223,8 @@ export class RegisterComponent implements OnInit {
                   setTimeout(() => {
                     this.router.navigate(['/']);
                   }, 4000);
-
-
                 }else{
-                  // error acured when adding use profile picture
+                  // error occurred when adding use profile picture
                   $('.popup-top').removeClass('success');
                   $('.top-image img').attr(
                     'src',
@@ -267,6 +262,8 @@ export class RegisterComponent implements OnInit {
             dim_stmt
           ) {
             this.file = _file;
+            this.file_oup = file;
+            console.log(this.file_oup)
             this.resetInput();
           }
         });
