@@ -25,18 +25,38 @@ export class UserService{
     return this.http.post(`${this.uri}/users/register/patient`, data);
   }
 
-  upload_img(img_src, file_extension){
+  upload_img(img_src, file_extension, username){
     const data = {
-      img_src: img_src.stream(),
-      extension: file_extension
+      img_src: img_src,
+      extension: file_extension,
+      username: username
     }
     return this.http.post(`${this.uri}/users/img/save`, data);
   }
 
 
-  get_img(){
-  
-    return this.http.get(`${this.uri}/users/img/get`);
+  get_img(token){
+   
+    const data = {
+      token: token
+    }
+    return this.http.post(`${this.uri}/users/img/get`, data);
+  }
+
+  get_expiration_time(token){
+    const data = {
+      token: token
+    }
+   
+    return this.http.post(`${this.uri}/users/chechk/session/expiration`, data);
+  }
+
+  update_status(user, status){
+    const data = {
+      username: user.username,
+      status: status
+    }
+    return this.http.post(`${this.uri}/users/update_status`,data);
   }
 
 }

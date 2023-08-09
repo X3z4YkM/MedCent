@@ -3,7 +3,7 @@ import {User} from '../models/user';
 import {UserService} from '../services/user.service';
 import * as $ from "jquery";
 import { Router } from '@angular/router';
-
+import { Location } from '@angular/common';
 
 
 @Component({
@@ -13,7 +13,8 @@ import { Router } from '@angular/router';
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private userServic: UserService, private router: Router) {
+  constructor(private userServic: UserService,
+     private router: Router, private location: Location) {
 
     // jquery stuff
     $(document).ready(()=>{
@@ -52,6 +53,11 @@ export class LoginComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    if(sessionStorage.getItem('user_token'))
+    {
+      console.log("uso")
+      this.location.back()
+    }
   }
   username: string;
   password: string;
@@ -69,12 +75,24 @@ export class LoginComponent implements OnInit {
           $(".popup-background").addClass("popup-active");
 
     }else{
-      this.userServic.login(this.username, this.password, this.role).subscribe((user: User)=>{
-        if(user){
-          if(user.type=='Doctor')
-            this.router.navigate(['/doctor'])
-          else
-            this.router.navigate(['/patient'])
+      this.userServic.login(this.username, this.password, this.role).subscribe((response)=>{
+        if(response['status'] == 200){
+          if(response['user_status']==='true'){
+            sessionStorage.setItem('user_token', response["return_token"])
+            if(response['user_type'] == 'Doctor')
+              this.router.navigate(['/doctor'])
+            else
+              this.router.navigate(['/patient'])
+          }else{
+            this.error_message = "Request still panding";
+            $(".popup-top").removeClass("success");
+            $(".top-image img").attr("src", "../../assets/icons/MedCent Exclamation.svg");
+            $(".top-message span").text("Sorry you can't sign in...");
+            $(".bottom-message span").text(this.error_message);
+            $(".bottom-next span").text("Return to the form");
+            $(".popup-background").addClass("popup-active");
+          }
+
         }
         else {
           this.error_message = "Wrong username or password";

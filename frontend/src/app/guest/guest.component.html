@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <title>MedCent</title>
+</head>
+<body>
+
+    <div class="header">
+        <img src="../../assets/icons/Mediamodifier-Design.svg" alt="MedCent" class="logo">
+        <h2 class="title_name">MedCent</h2>
+        <div class="button">
+            <input type="submit"  value="Log in" (click)="login()">
+        </div>
+    </div>
+
+    <div class="container">
+        <div id="carousel-example" class="carousel slide" data-ride="carousel">
+
+            <div class="carousel-inner">
+                <div class="carousel-item active">
+                    <img src="../../assets/img/img1.jpg" class="img_c" alt="slide-img-1">
+                    <div class="carousel-caption">
+                        <h1 style="color: black;"  class="title_card">Best Medical Cear</h1>
+                        <div class="carousel-caption-description">
+                            
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <ol class="carousel-indicators">
+                <li id="ci1" data-slide-to="0" class="active"></li>
+                <li id="ci2" data-slide-to="1"></li>
+                <li id="ci3" data-slide-to="2"></li>
+                <li id="ci4" data-slide-to="3"></li>
+                <li id="ci5" data-slide-to="4"></li>
+            </ol>
+     
+
+        </div>
+        <br>
+        <hr>
+        
+        <div class="header-search">
+            <div class="search-bar">
+                <img src="../../assets//icons/Mediamodifier-Design.svg" class="search-image">
+                <input type="text" name="input-search" id="header-search" placeholder="Search" maxlength="33">
+            </div>
+            <div class="dropdown-search">
+                <div class="search-scroll">
+                    <div class="search-option-title">
+                        <div>
+                        <span class="search-options">Search Options</span>
+                        </div>   
+                        
+                    </div>
+                 
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">firstname: </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">lastname: </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">specializzazione: </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-option-title">
+                        <div>
+                        <span class="search-options">Filter Options</span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterASC firstname </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterASC lastname </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterASC specializzazione </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterDESC firstname </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterDESC lastname </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterDESC specializzazione </span>
+                        </div>   
+                    </div>
+                    <hr>
+
+                </div>
+                
+            </div>
+        </div>
+
+
+        <div class="flex_container">
+            <div *ngFor="let d of doctors" class="container_table_inner">
+                    
+                    <table class="">
+                        <tr>
+                            <th></th>
+                            <th>Firstname</th>
+                            <th>Lastname</th>
+                            <th>Specializzazione</th>
+                        </tr>
+                        
+                        <td><img [src]="d.img_path" class="img_doc" d.alt="+"></td>
+                        <td class="info"><span>{{d.firstname}}</span></td>
+        
+                        <td class="info"><span>{{d.lastname}}</span></td>
+                        <td class="info"><span>{{d.specializzazione}}</span></td>
+                    </table>
+                <hr>
+            </div>
+        </div>
+    </div>
+
+
+    
+</body>
+</html>

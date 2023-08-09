@@ -1,0 +1,193 @@
+@font-face {
+    font-family: roboto-regular;
+    src: url("../../assets/fonts/Roboto-Regular.ttf");
+}
+
+@font-face {
+    font-family: roboto-bold;
+    src: url("../../assets/fonts/Roboto-Regular.ttf");
+}
+
+@font-face {
+    font-family: roboto-light;
+    src: url("../../assets/fonts/Roboto-Regular.ttf");
+}
+
+
+@font-face {
+    font-family: roboto-medium;
+    src: url("../../assets/fonts/Roboto-Medium.ttf");
+}
+
+@font-face {
+    font-family: roboto-regular-italic;
+    src: url("../../assets/fonts/Roboto-Italic.ttf");
+}
+
+@font-face {
+    font-family: roboto-light-italic;
+    src: url("../../assets/fonts/Roboto-LightItalic.ttf");
+}
+
+body{
+ 
+    max-height: 100%;
+}
+.header {
+    background-color: #f8f7f7;
+    height: 70px;
+    display: flex;
+    align-items: center;
+    box-shadow: -10px 0px 20px rgba(64, 64, 64, 0.377);
+    position: relative;
+  
+}
+
+.logo {
+    position: relative;
+    margin-left: 40px;
+    width: 70px;
+    height: 60px;
+}
+.header .title_name{
+    position: relative;
+    font-size: 40px;
+    font-family: roboto-bold;
+    text-align: center;
+    color: #1a3b61;
+}
+
+
+
+.container {
+    
+    margin-top: 1%;
+
+    width: 100%;
+    max-height: 100%;
+    background-color: #fcfcfc;
+
+    padding: 50px 77px;
+    border-radius: 30px;
+
+    box-shadow: 5px 0px 20px rgba(64, 64, 64, 0.493);
+    overflow-y: scroll;
+}
+
+.tr {
+    flex: 1;
+    border: 1px solid rgb(235, 221, 96);
+    padding: 10px;
+}
+.table{
+    display: flex;
+  flex-wrap: wrap;
+  max-height: 100%;
+ 
+}
+
+.tr{
+    margin-top: 1%;
+    max-width: 100%;
+    width: 100%;
+    max-height: 100%;
+    background-color: #fcfcfc;
+
+    padding: 50px 77px;
+    border-radius: 30px;
+    flex: 0 0 calc(50% - 20px); 
+    display: flex;
+    margin: 5px;
+    box-shadow: 5px 0px 20px rgba(64, 64, 64, 0.1);
+}
+
+
+.tr span{
+    margin-left: 2%;
+}
+.user-image {
+    width: 70px; 
+    height: 70px; 
+    margin-right: 10px; 
+    border-radius: 50%;
+  }
+  
+  .data {
+    display: flex;
+    flex-direction: column; 
+    align-items: flex-start;
+    justify-content: flex-start;
+    
+    background-color: #fcfcfc;
+  }
+  .data div{
+    background-color: #fcfcfc;
+  }
+
+  .label {
+    margin-right: 5px;
+  }
+
+  .clearfix::after {
+    content: "";
+    display: table;
+    clear: both;
+  }
+
+
+  .data span{
+    white-space: nowrap;
+  }
+
+  .indent {
+    padding-left: 20px; 
+  }
+  
+  .buttons-container {
+    display: flex;
+  }
+
+  .buttons-container button {
+    margin-right: 100px;
+    text-align: center;
+    
+  }
+
+  .buttons-container .button .edit{
+    width: 50%;
+    height: 30px;
+    background-color: #1a3b61;
+    display: inline-block;
+    color: white;
+    border-radius: 12px;
+    border-style: none;
+
+    transition: all 0.4s;
+
+    font-size: 18px;
+    font-family: roboto-bold;
+}
+.buttons-container .button .delete{
+    width: 50%;
+    height: 30px;
+    background-color: #611a1a;
+    display: inline-block;
+    color: white;
+    border-radius: 12px;
+    border-style: none;
+
+    transition: all 0.4s;
+
+    font-size: 18px;
+    font-family: roboto-bold;
+}
+
+.buttons-container  .button .edit:hover {
+    transition: all 0.4s;
+    background-color: #36669c;
+}
+
+.buttons-container  .button .delete:hover {
+    transition: all 0.4s;
+    background-color: #9c363f;
+}

@@ -1,1 +1,172 @@
-<p>doctor works!</p>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedCent</title>
+</head>
+<body>
+    <div class="header">
+        <img src="../../assets/icons/Mediamodifier-Design.svg" alt="MedCent" class="logo">
+        <h2 class="title_name">MedCent</h2>
+        <div class="optiosn">
+            <div class="option_profile active">
+                <button >Profile</button>
+            </div>
+            <div class="option_chechkups">
+                <button>Chechkups</button>
+            </div>
+            <div class="option_more">
+                <button>More</button>
+            </div>
+            <div class="option_logout">
+                <button (click)="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="selected_view === 'profile'" class="container">
+     
+        <div class="table">
+            <div class="tr" >
+                
+                <img *ngIf="doctor.edit != true" [src]="doctor.img_path" d.alt="+" class="user-image">
+
+                <div *ngIf="doctor.edit == true " class="avatar-container">
+                    <div class="image-container" *ngIf="getUser().file; else placeholder"
+                    [ngStyle]="{backgroundImage: 'url(' + getUser().file + ')'}">
+                    </div>
+                
+                    <ng-template #placeholder>
+                        <div class="image-container avatar-placeholder">
+                        </div>
+                    </ng-template>
+                
+                    <label for="avatar-input-file">
+                        <div class="icon-wrapper">
+                            <input type="file" id="avatar-input-file" accept="image/*" (change)="onFileChange($event)" />
+                            <mat-icon class="icon" fontIcon="edit">edit</mat-icon>
+                        </div>
+                    </label>
+                
+                </div>
+
+                <div class="data" >
+                    <div>
+                        <span class="label">Firstname:</span>  
+                        <span *ngIf="doctor.edit != true">{{doctor.firstname}}</span>
+                        <input *ngIf="doctor.edit == true" value="{{doctor.firstname}}" placeholder="{{doctor.firstname}}" [(ngModel)]="getUser().firstname">
+                    </div>
+                    <div>
+                        <span class="label">Lastname:</span>  
+                        <span *ngIf="doctor.edit != true">{{doctor.lastname}}</span>
+                        <input *ngIf="doctor.edit == true" value="{{doctor.lastname}}" placeholder="{{doctor.lastname}}" [(ngModel)]="getUser().lastname">
+                    </div>
+                    <div>
+                        <span class="label">Username:</span>  
+                        <span *ngIf="doctor.edit != true">{{doctor.username}}</span>
+                        <input *ngIf="doctor.edit == true" value="{{doctor.username}}" placeholder="{{doctor.username}}"[(ngModel)]="getUser().username">
+                    </div>
+                    <div>
+                        <span class="label">Password:</span>  
+                        <span *ngIf="doctor.edit != true">{{doctor.password}}</span>
+                        <input *ngIf="doctor.edit == true" value="{{doctor.password}}" placeholder="{{doctor.password}}" [(ngModel)]="getUser().password">
+                    </div>
+                    <div>
+                        <span class="label">Address:</span>  
+                        <span *ngIf="doctor.edit != true">{{doctor.address}}</span>
+                        <input *ngIf="doctor.edit == true" value="{{doctor.address}}" placeholder="{{doctor.address}}"[(ngModel)]="getUser().address">
+                    </div>
+                    <div>
+                        <span class="label">phone:</span>  
+                        <span *ngIf="doctor.edit != true">{{doctor.mobile_phone}}</span>
+                        <input *ngIf="doctor.edit == true" value="{{doctor.mobile_phone}}" placeholder="{{doctor.mobile_phone}}"[(ngModel)]="getUser().mobile_phone">
+                    </div>
+                    <div>
+                        <span class="label">Email:</span>  
+                        <span>{{doctor.email}}</span>
+                    </div>
+                    <div>
+                        <span class="label">Role:</span>  
+                        <span *ngIf="doctor.edit != true">{{doctor.type}}</span>
+                        <input *ngIf="doctor.edit == true" value="{{doctor.type}}" placeholder="{{doctor.type}}" [(ngModel)]="getUser().type">
+                    </div>
+                    <div *ngIf="doctor.type == 'Doctor'">
+                        <span class="label">Doctor data:</span>  
+                        <div class="indent">
+                            <div>
+                                <span class="label">Licenc number:</span>  
+                                <span *ngIf="doctor.edit != true"> {{doctor.d_data['number_doctor_licenc']}}</span>
+                                <input *ngIf="doctor.edit == true" value="{{doctor.d_data['number_doctor_licenc']}}"
+                                 placeholder="{{doctor.d_data['number_doctor_licenc']}}"[(ngModel)]="getUser().d_data['number_doctor_licenc']">
+                            </div>
+                            <div>
+                                <span class="label">Specializzazione:</span>  
+                                <span *ngIf="doctor.edit != true">{{doctor.d_data['specializzazione']}}</span>
+                                <input *ngIf="doctor.edit == true" value="{{doctor.d_data['specializzazione']}}" 
+                                placeholder="{{doctor.d_data['specializzazione']}}"[(ngModel)]="getUser().d_data['specializzazione']">
+                            </div>
+                            <div>
+                                <span class="label">Office branch:</span>  
+                                <span> {{doctor.d_data['office_branch']}}</span>
+                            </div>
+                            
+                        </div>
+                       
+                    </div>
+                    <div class="buttons-container">
+                        <div *ngIf="doctor.edit != true" class="button">
+                                <button class="edit" (click)="edit_mode()">edit</button>
+                        </div>
+                        <div *ngIf="doctor.edit == true" class="button">
+                            <button class="edit" (click)="save_mode()" >save</button>
+                        </div>
+                        <div *ngIf="doctor.edit == true" class="button">
+                            <button class="delete" (click)="view_mode()" >cancle</button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+     
+        </div>
+        
+        <div class="services">
+            <div class="title">
+                <span *ngIf="edit_flag != true" class="label">Your {{doctor.d_data['specializzazione']}} services:</span>
+                <span *ngIf="edit_flag == true" class="label">Select {{doctor.d_data['specializzazione']}} services:</span>
+            </div> 
+            <div *ngFor="let s of services" class="services_wrrapper">
+                <div class="indent">
+                    <span *ngIf="!edit_flag && s.selected" class="label">{{s.servic_name}}</span>  
+                    <span *ngIf="edit_flag " class="label">{{s.servic_name}}</span>  
+                    <input  *ngIf="edit_flag"  type="checkbox" [(ngModel)]="s.selected"
+                    (change)="s.changed = !s.changed">
+                </div>
+            </div>
+            <div class="buttons-container">
+                <div *ngIf="edit_flag != true" class="button">
+                        <button class="edit" (click)="edit_mode_s()">edit</button>
+                </div>
+                <div *ngIf="edit_flag == true" class="button">
+                    <button class="edit" (click)="save_mode_s()" >save</button>
+                </div>
+                <div *ngIf="edit_flag == true" class="button">
+                    <button class="delete" (click)="view_mode_s()" >cancle</button>
+                </div>
+            </div>
+
+        </div>
+       
+    </div>
+
+    <div *ngIf="selected_view === 'chechkups'" class="container">
+    </div>
+
+
+    <div *ngIf="selected_view === 'more'" class="container">
+    </div>
+    
+</body>
+</html>

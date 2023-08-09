@@ -3,6 +3,10 @@ import cors from 'cors'
 import bodyParser from 'body-parser'
 import mongoose from 'mongoose'
 import userRouter from './routers/user.routes';
+import doctorRouter from './routers/doctor.router';
+import managerRouter from './routers/manager.router';
+import servicsRouter from './routers/services.router';
+
 
 const app = express()
 app.use(cors())
@@ -10,6 +14,8 @@ app.use(bodyParser.json())
 app.use(express.urlencoded({ extended: true }));
 app.use(express.raw({"type": "image/jpeg"}));
 app.use(express.raw({"type": "image/png"}));
+
+
 
 mongoose.connect('mongodb://localhost:27017/medicalcentar')
 
@@ -20,6 +26,10 @@ connection.once('open',()=>{
 
 const router = express.Router();
 router.use('/users', userRouter);
+router.use('/doctors', doctorRouter);
+router.use('/manager', managerRouter);
+router.use('/servics', servicsRouter)
+
 
 app.use('/',router);
 

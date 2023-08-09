@@ -95,7 +95,7 @@
 .button input {
     width: 100%;
     height: 57px;
-    background-color: #67badb;
+    background-color: #1a3b61;
     display: inline-block;
     color: white;
     border-radius: 12px;
@@ -109,7 +109,7 @@
 
 .button input:hover {
     transition: all 0.4s;
-    background-color: #56a6c5;
+    background-color: #36669c;
 }
 
 

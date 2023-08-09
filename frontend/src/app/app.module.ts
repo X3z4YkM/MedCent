@@ -13,7 +13,9 @@ import { PatientComponent } from './patient/patient.component';
 import { MenagerComponent } from './menager/menager.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatButtonModule,} from  '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon'
+import { MatIconModule } from '@angular/material/icon';
+import { GuestComponent } from './guest/guest.component';
+import { UserProfileViewComponent } from './user-profile-view/user-profile-view.component';
 
 
 
@@ -25,7 +27,9 @@ import { MatIconModule } from '@angular/material/icon'
     RegisterComponent,
     DoctorComponent,
     PatientComponent,
-    MenagerComponent
+    MenagerComponent,
+    GuestComponent,
+    UserProfileViewComponent
     
   ],
   imports: [

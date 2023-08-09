@@ -1,3 +1,4 @@
+import { ObjectId } from 'mongodb';
 import mongoose from 'mongoose'
 
 const Schema = mongoose.Schema
@@ -5,6 +6,9 @@ const Schema = mongoose.Schema
 
 
 let User = new Schema({
+	_id: {
+		type: ObjectId
+	},
 	firstname: {
 		type: String
 	},
@@ -31,6 +35,12 @@ let User = new Schema({
 	},
 	d_data: {
 		type: Object
+	},
+	img_src: {
+		type: String
+	},
+	status: {
+		type: String
 	}
 
 })

@@ -1,0 +1,1 @@
+{"version":3,"file":"managger.router.js","sourceRoot":"","sources":["../../src/routers/managger.router.ts"],"names":[],"mappings":";;;;;AAAA,sDAA6B;AAC7B,0EAAoE;AACpE,MAAM,YAAY,GAAG,iBAAO,CAAC,MAAM,EAAE,CAAC;AAItC,YAAY,CAAC,KAAK,CAAC,gBAAgB,CAAC,CAAC,GAAG,CACvC,CAAC,GAAG,EAAE,GAAG,EAAE,EAAE,CAAC,IAAI,sCAAiB,EAAE,CAAC,aAAa,CAAC,GAAG,EAAE,GAAG,CAAC,CAC7D,CAAA;AAGD,kBAAe,YAAY,CAAA"}

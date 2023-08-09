@@ -174,6 +174,11 @@ export class RegisterComponent implements OnInit {
         $('.popup-background').addClass('popup-active');
       } else {
         // preparing payload for server 
+
+                
+        const data  = this.file.length > 0?await this.readImageFile(this.file_oup):null
+        console.log("ima slika")
+
         const data_package = {
           username: username,
           name: name,
@@ -182,6 +187,8 @@ export class RegisterComponent implements OnInit {
           mobile: mobile,
           password: password,
           street: street,
+          img_src: data,
+          extension: this.file_extension
         };
         this.userService.register(data_package).subscribe(async (response) => {
           // error caused by 1)user alredy exists or server side error
@@ -204,7 +211,7 @@ export class RegisterComponent implements OnInit {
             $('.popup-top').addClass('success');
             $('.top-image img').attr(
               'src',
-              '../../assets/icons/MedCent CheckMark.svg'
+              '../../assets/icons/MedCent Exclamation.svg'
             );
             $('.top-message span').text('You have signed up successfully!');
             $('.bottom-message span').text(
@@ -215,36 +222,9 @@ export class RegisterComponent implements OnInit {
             );
 
             $('.popup-background').addClass('popup-active');
-
-            if (this.file.length > 0) {
-              //prepare img
-
-              this.userService.upload_img(await this.readImageFile(this.file_oup), this.file_extension).subscribe((response) => {
-
-                if(response['status']==200){
-                  // picture is added redirect user to login page
-                  setTimeout(() => {
-                    this.router.navigate(['/']);
-                  }, 4000);
-                }else{
-                  // error occurred when adding use profile picture
-                  $('.popup-top').removeClass('success');
-                  $('.top-image img').attr(
-                    'src',
-                    '../../assets/icons/MedCent Exclamation.svg'
-                  );
-                  $('.top-message span').text("Sorry you can't sign up...");
-                  $('.bottom-message span').text(error_message);
-                  $('.bottom-next span').text('Return to the form');
-                  $('.popup-background').addClass('popup-active');
-                }
-
-              });
-            } else {
-              setTimeout(() => {
-                this.router.navigate(['/']);
-              }, 4000);
-            }
+            setTimeout(() => {
+              this.router.navigate(['/login']);
+            }, 4000); 
           }
         });
       }
@@ -269,7 +249,7 @@ export class RegisterComponent implements OnInit {
   }
   
 
-  onFileChange(event: any)  {
+  async onFileChange(event: any)  {
     const files = event.target.files as FileList;
 
     if (files.length > 0) {
@@ -282,9 +262,7 @@ export class RegisterComponent implements OnInit {
             dim_stmt
           ) {
             this.file = _file;
-            this.file_oup = files[0]
-            console.log(await this.readImageFile(this.file_oup))
-            
+            this.file_oup = files[0];
             this.resetInput();
           }
         });
