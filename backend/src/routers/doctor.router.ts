@@ -13,4 +13,9 @@ doctorRouter.route('/get_doctor').post(
 doctorRouter.route('/update_user').post(
 	(req, res) => new DoctorController().updateProfile(req,res)
 )
+
+doctorRouter.route('/calender/get').post(
+	(req, res) => new DoctorController().get_doctor_calender(req,res)
+)
+
 export default doctorRouter

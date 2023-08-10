@@ -3,6 +3,9 @@ import User from "../models/user";
 import { UserController } from "./user.controller";
 import * as fs from "fs";
 import path from "path";
+import Offline_date from "../models/offline_date";
+import Calender  from "../models/doctor.calender";
+
 const jwt = require("jsonwebtoken");
 const { ObjectId } = require("mongodb");
 const secret = "12g47JNBAbBVHJDA423ascH7bjqb6574gyiu67rKNjn9B";
@@ -196,6 +199,95 @@ export class DoctorController {
             }
           });
         });
-      };
+    };
+
+    set_new_offline_date = (req: express.Request, res: express.Response)=>{
+    
+        const sdate = req.body.start_date as Date;
+        const edate = req.body.end_date as Date;
+        const token = req.body.token;
+        jwt.verify(req.body.token, secret, (err, decoded) => {
+
+            if(decoded){
+                const id = decoded['_doc']._id
+                Offline_date.updateOne(
+                { "docotrId": `${id}` },
+                { $pull: { "offline_dates": { "start_date": `${sdate}`, "end_date": `${edate}` }}}
+                ).then(()=>{
+                        res.status(200)
+                        .json({
+                            status: 200,
+                            cause: "new date added "
+                        })
+                    }).catch((err)=>{
+                        res.status(500)
+                        .json({
+                            status: 500,
+                            cause: "faild to add dates",
+                            error_message: err
+                        })
+                    })
+            }else{
+                res.status(500)
+                .json({
+                    status: 500,
+                    cause: "token invalid",
+                    error_message: err
+                })
+            }
+        });
+    
+    }
+
+ 
+    get_doctor_calender = (req: express.Request, res: express.Response)=>{
+
+        const token = req.body.token;
+        jwt.verify(token, secret, (err, decoded) => {
+            
+            if(decoded){
+                const id = decoded["_doc"]._id;
+
+                Calender.findOne({"doctor_id": id}, (err, data)=>{
+                    // calender for docotr exists
+                    if(data){
+                        // all is good my 
+                        res.status(200)
+                        .json({
+                            status: 200,
+                            message: "found calender for doctor",
+                            data: data["reservations"]
+                        })
+                    }else{
+                        if(err){
+                            res.status(200)
+                            .json({
+                                status:401,
+                                message: "error while getting data",
+                                error_message: err
+                            })
+                        }else{
+                            res.json(200)
+                            .json({
+                                status: 200,
+                                message: "calender emmpty",
+                                data: []
+                            })
+                        }
+                    }
+                });
+                
+            }else{
+                res.status(200)
+                .json({
+                    status:500,
+                    message: "token invalid",
+                    error_message: err
+                })
+            }
+        })
+
+
+    }
 
 }

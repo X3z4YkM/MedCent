@@ -9,5 +9,6 @@ const doctorRouter = express_1.default.Router();
 doctorRouter.route('/get_all').get((req, res) => new doctor_controller_1.DoctorController().get_all(req, res));
 doctorRouter.route('/get_doctor').post((req, res) => new doctor_controller_1.DoctorController().getDoctor(req, res));
 doctorRouter.route('/update_user').post((req, res) => new doctor_controller_1.DoctorController().updateProfile(req, res));
+doctorRouter.route('/calender/get').post((req, res) => new doctor_controller_1.DoctorController().get_doctor_calender(req, res));
 exports.default = doctorRouter;
 //# sourceMappingURL=doctor.router.js.map

@@ -211,7 +211,7 @@ export class RegisterComponent implements OnInit {
             $('.popup-top').addClass('success');
             $('.top-image img').attr(
               'src',
-              '../../assets/icons/MedCent Exclamation.svg'
+              'frontend/src/assets/icons/MedCent Exclamation.svg'
             );
             $('.top-message span').text('You have signed up successfully!');
             $('.bottom-message span').text(

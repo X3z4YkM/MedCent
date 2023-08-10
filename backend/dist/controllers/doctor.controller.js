@@ -30,6 +30,8 @@ exports.DoctorController = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const fs = __importStar(require("fs"));
 const path_1 = __importDefault(require("path"));
+const offline_date_1 = __importDefault(require("../models/offline_date"));
+const doctor_calender_1 = __importDefault(require("../models/doctor.calender"));
 const jwt = require("jsonwebtoken");
 const { ObjectId } = require("mongodb");
 const secret = "12g47JNBAbBVHJDA423ascH7bjqb6574gyiu67rKNjn9B";
@@ -196,6 +198,84 @@ class DoctorController {
                         resolve(1);
                     }
                 });
+            });
+        };
+        this.set_new_offline_date = (req, res) => {
+            const sdate = req.body.start_date;
+            const edate = req.body.end_date;
+            const token = req.body.token;
+            jwt.verify(req.body.token, secret, (err, decoded) => {
+                if (decoded) {
+                    const id = decoded['_doc']._id;
+                    offline_date_1.default.updateOne({ "docotrId": `${id}` }, { $pull: { "offline_dates": { "start_date": `${sdate}`, "end_date": `${edate}` } } }).then(() => {
+                        res.status(200)
+                            .json({
+                            status: 200,
+                            cause: "new date added "
+                        });
+                    }).catch((err) => {
+                        res.status(500)
+                            .json({
+                            status: 500,
+                            cause: "faild to add dates",
+                            error_message: err
+                        });
+                    });
+                }
+                else {
+                    res.status(500)
+                        .json({
+                        status: 500,
+                        cause: "token invalid",
+                        error_message: err
+                    });
+                }
+            });
+        };
+        this.get_doctor_calender = (req, res) => {
+            const token = req.body.token;
+            jwt.verify(token, secret, (err, decoded) => {
+                if (decoded) {
+                    const id = decoded["_doc"]._id;
+                    doctor_calender_1.default.findOne({ "doctor_id": id }, (err, data) => {
+                        // calender for docotr exists
+                        if (data) {
+                            // all is good my 
+                            res.status(200)
+                                .json({
+                                status: 200,
+                                message: "found calender for doctor",
+                                data: data["reservations"]
+                            });
+                        }
+                        else {
+                            if (err) {
+                                res.status(200)
+                                    .json({
+                                    status: 401,
+                                    message: "error while getting data",
+                                    error_message: err
+                                });
+                            }
+                            else {
+                                res.json(200)
+                                    .json({
+                                    status: 200,
+                                    message: "calender emmpty",
+                                    data: []
+                                });
+                            }
+                        }
+                    });
+                }
+                else {
+                    res.status(200)
+                        .json({
+                        status: 500,
+                        message: "token invalid",
+                        error_message: err
+                    });
+                }
             });
         };
     }

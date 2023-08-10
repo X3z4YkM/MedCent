@@ -38,4 +38,37 @@ export class DoctorService {
     }
     return this.http.post(`${this.uri}/servics/docotr/update`, payload);
   }
-}
+
+  add_workoff_dates(token, date1: Date, date2: Date){
+    const data = {
+      token: token,
+      start_date: date1,
+      end_date: date2
+    }
+    return this.http.post(`${this.uri}/servics/docotr/workoff/add`, data);
+  }
+
+  get_expiration_time(token){
+    const data = {
+      token: token
+    }
+   
+    return this.http.post(`${this.uri}/users/chechk/session/expiration`, data);
+  }
+
+  set_new_req_spec(req, spec){
+    const data = {
+      request : req,
+      specializzazione: spec
+    }
+    return this.http.post(`${this.uri}/servics/specializzazione/request/add`, data);
+  }
+
+  get_calender_for_doctor(token){
+    const data = {
+      token: token
+    }
+    return this.http.post(`${this.uri}/doctors/calender/get`, data);
+  }
+
+} 

@@ -11,13 +11,13 @@
         <h2 class="title_name">MedCent</h2>
         <div class="optiosn">
             <div class="option_profile active">
-                <button >Profile</button>
+                <button data-target = "div_profile">Profile</button>
             </div>
             <div class="option_chechkups">
-                <button>Chechkups</button>
+                <button data-target = "div_chechkups">Chechkups</button>
             </div>
             <div class="option_more">
-                <button>More</button>
+                <button data-target = "div_more">More</button>
             </div>
             <div class="option_logout">
                 <button (click)="logout()">Logout</button>
@@ -25,7 +25,7 @@
         </div>
     </div>
 
-    <div *ngIf="selected_view === 'profile'" class="container">
+    <div id="div_profile" class="container">
      
         <div class="table">
             <div class="tr" >
@@ -161,11 +161,113 @@
        
     </div>
 
-    <div *ngIf="selected_view === 'chechkups'" class="container">
+    <div  id="div_chechkups" class="container">
+        <div  id="div_chechkups" class="content">
+            <div class="containerc">
+              <div class="main">
+            
+                <div class="month1"> 
+                       
+                  <span id="c" class="title">Calendar<br></span>
+                  
+                  <span class="title2">Please choose a date<br></span>
+                </div>
+                <div class="calendar">
+                  <ul class="weekdays">
+                    <li>Su</li>
+                    <li>Mo</li>
+                    <li>Tu</li>
+                    <li>We</li>
+                    <li>Th</li>
+                    <li>Fr</li>
+                    <li >Sa</li>
+                  
+                  </ul>
+                  <div class="days">
+                    <ul class="days2">  
+                      
+                    </ul>
+                  </div>
+                </div>
+                <div class="mesec">
+                  <div class="month"><img class="levo" src="../../assets//icons/levo.svg" width="20px" height="20px"  ></div>
+                  <div class="month" id="monthID">      
+                  </div>
+                  <div class="month"><img class="desno" src="../../assets//icons/desno.svg" width="20px" height="20px"  ></div>
+                  
+                </div>
+              </div>
+          </div>
+        </div>
+          <div class="form-popup" id="myForm">
+              <form class="form-container">
+                <h1> Chechkups<br></h1>
+                <p id="currDate"></p>
+            
+                <div class="view_ch">
+
+                </div>
+                <button type="button" class="btn cancel" (click)="closeForm()">Close</button>
+              </form>
+            </div>
     </div>
 
 
-    <div *ngIf="selected_view === 'more'" class="container">
+    <div id="div_more" class="container">
+        <div class="data2" >
+            <div>
+                <span class="label">Request a new servic for specializzazione {{doctor.d_data["specializzazione"]}}:</span> 
+                <hr> 
+                <input class="servic_request_input" placeholder="servic name..." [(ngModel)]="new_req">
+                <div class="buttons-container">
+                    <div class="button">
+                        <button (click)="submit_servic_request()" class="edit">send</button>
+                    </div>
+                </div>
+            </div>
+           <br/>
+            <div>
+                <span class="label">Enter Dates:</span>
+                <hr>
+                <div>
+                    <span class="label">Date start: </span>
+                    <input class="workoff_input" type="date" id="breakDatestart" name="breakDatestart" required
+                    [(ngModel)]="sdate">
+                    <br/>
+                    <span class="label">Date end: </span>
+                    <input class="workoff_input" type="date" id="breakDateend" name="breakDateend" required
+                    [(ngModel)]="edate">
+                </div>
+                <br>
+                <div class="buttons-container">
+                    <div class="button">
+                        <button class="edit" id="date_submit">submit</button>
+                    </div>
+                </div>
+
+                <div class="popup-background">
+                    <div class="popup-container">
+                        <div class="popup-top">
+                            <div class="top-image">
+                                <img id="topimg">
+                            </div>
+
+                            <div class="top-message">
+                                <span></span>
+                            </div>
+                        </div>
+                        <div class="popup-bottom">
+                            <div class="bottom-message">
+                                <pre class="preclass"><span></span></pre>
+                            </div>
+                            <div class="bottom-next">
+                                <span></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     
 </body>
