@@ -162,6 +162,7 @@
     </div>
 
     <div  id="div_chechkups" class="container">
+        
         <div  id="div_chechkups" class="content">
             <div class="containerc">
               <div class="main">
@@ -182,6 +183,8 @@
                     <li>Fr</li>
                     <li >Sa</li>
                   
+                   
+
                   </ul>
                   <div class="days">
                     <ul class="days2">  
@@ -199,17 +202,86 @@
               </div>
           </div>
         </div>
-          <div class="form-popup" id="myForm">
-              <form class="form-container">
+           
+        <div class="form-popup" id="myForm">    
+            <div class="form-container">
                 <h1> Chechkups<br></h1>
                 <p id="currDate"></p>
-            
+                
                 <div class="view_ch">
-
+                    
                 </div>
+                
                 <button type="button" class="btn cancel" (click)="closeForm()">Close</button>
-              </form>
             </div>
+            <div class="popup-background">
+                <div class="popup-container">
+                    <div class="popup-top">
+                        <div class="top-image">
+                            <img id="topimg">
+                        </div>
+
+                        <div class="top-message">
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="popup-bottom">
+                        <div class="bottom-message">
+                            <pre class="preclass"><span></span></pre>
+                        </div>
+                        <div class="bottom-next">
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="report_data_container">
+                <div class="title_rep">
+                    Patient Reports
+                </div>
+                <div class="wrapper_report_data">
+                    <div *ngFor="let l of user_specific_reports" class="repo_wrap">
+                        <div class="data">
+                        Date of report: {{l.date1}}
+                        </div>
+                        <div class="data">
+                            Doctor's name: {{l.doctors_name}}
+                        </div>
+        
+                        <div class="data">
+                            Specializzazione: {{l.specializzazione}}
+                        </div>
+                        <div class="data">
+                            Reason for comming: 
+                            <div>
+                                {{l.reason_for_comming}}
+                            </div>
+                        </div>
+        
+                        <div class="data">
+                            Diagnosis: 
+                            <div>{{l.diagnosis}}</div>
+                        </div>
+                        <div class="data">
+                            Therapy:
+                            <div>
+                                {{l.therapy}}
+                            </div>
+                        </div>
+        
+                        <div class="data">
+                            Next session: {{l.date2}}
+                        </div>
+                    </div>
+                    
+                </div>
+                <div>
+                    <button class="close-button" (click)="hide_rep_button()">close</button>
+                </div>
+            </div>          
+        </div>
+          
+       
     </div>
 
 
@@ -266,6 +338,8 @@
                         </div>
                     </div>
                 </div>
+
+
             </div>
         </div>
     </div>

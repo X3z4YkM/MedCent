@@ -6,4 +6,7 @@ export class CalanderData{
     firstname: string;
     lastname: string;
     syntaxsugger: string;
+    doctorts_note: boolean;
+    status: string;
+    cancled: boolean;
 }

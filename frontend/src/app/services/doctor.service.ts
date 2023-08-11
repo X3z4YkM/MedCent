@@ -71,4 +71,25 @@ export class DoctorService {
     return this.http.post(`${this.uri}/doctors/calender/get`, data);
   }
 
+  generate_report(report){
+    const data = {
+      data: report
+    }
+    return this.http.post(`${this.uri}/servics/report/generate`,data);
+  }
+
+  cancle_op_as_doc(data_send){
+    const data = {
+      data: data_send
+    }
+    return this.http.post(`${this.uri}/servics/appointment/cancle/doctor`,data);
+  }
+
+  get_user_specific_reports(id){
+    const data = {
+      id:id
+    }
+    return this.http.post(`${this.uri}/servics/reports/user/get`,data);
+  }
+
 } 

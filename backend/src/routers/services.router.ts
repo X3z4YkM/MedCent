@@ -19,4 +19,15 @@ servicsRouter.route('/specializzazione/request/add').post(
 servicsRouter.route('/specializzazione/request/get').get(
 	(req, res) => new ServicsController().get_req_spec(req, res)
 )
+
+servicsRouter.route('/report/generate').post(
+	(req, res) => new ServicsController().generate_report(req, res)
+)
+
+servicsRouter.route('/appointment/cancle/doctor').post(
+	(req, res) => new ServicsController().cancle_appoinment_docotr(req, res)
+)
+servicsRouter.route('/reports/user/get').post(
+	(req, res) => new ServicsController().get_all_reports_for_user(req, res)
+)
 export default servicsRouter

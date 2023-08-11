@@ -10,6 +10,8 @@ const specializzazione_servics_1 = __importDefault(require("../models/specializz
 const doctor_selected_specializzazione_1 = __importDefault(require("../models/doctor_selected_specializzazione"));
 const offline_date_1 = __importDefault(require("../models/offline_date"));
 const services_request_new_servic_1 = __importDefault(require("../models/services.request_new_servic"));
+const report_1 = __importDefault(require("../models/report"));
+const doctor_calender_1 = __importDefault(require("../models/doctor.calender"));
 class ServicsController {
     constructor() {
         this.specializzazione_based_services = (req, res) => {
@@ -270,6 +272,139 @@ class ServicsController {
                     status: 200,
                     data: data
                 });
+            });
+        };
+        this.generate_report = (req, res) => {
+            const data = req.body.data;
+            const report = new report_1.default({
+                date_of_report: data["date_of_report"],
+                doctors_name: data["doctors_name"],
+                specializzazione: data["specializzazione"],
+                reason_for_comming: data["reason_for_comming"],
+                diagnosis: data["diagnosis"],
+                therapy: data["therapy"],
+                next_session: data["next_session"],
+                patient_id: data["patient_id"],
+                date_of_schedule: data["date_of_schedule"]
+            });
+            console.log(data);
+            console.log(report);
+            report.save((err, datas) => {
+                if (datas) {
+                    console.log("sa");
+                    // update doctors calander
+                    doctor_calender_1.default.findOneAndUpdate({
+                        doctor_id: data['doctor_id'],
+                        'reservations.patient_id': data['patient_id'],
+                        'reservations.date_start': new Date(data['date_of_schedule']),
+                    }, {
+                        $set: { 'reservations.$.doctorts_note': true }
+                    }, (err, dataf) => {
+                        console.log(dataf);
+                        if (err) {
+                            res.status(200)
+                                .json({
+                                status: 401,
+                                error_message: err
+                            });
+                        }
+                        else if (dataf) {
+                            res.status(200)
+                                .json({
+                                status: 200
+                            });
+                        }
+                    });
+                }
+                else {
+                    console.log("nsa");
+                    res.status(200)
+                        .json({
+                        status: 401,
+                        error_message: err
+                    });
+                }
+            });
+        };
+        this.cancle_appoinment_docotr = (req, res) => {
+            const data = req.body.data;
+            console.log(data);
+            const query = {
+                doctor_id: data['doctor_id'],
+                'reservations.patient_id': data['patient_id'],
+                'reservations.date_start': new Date(data['date_of_start']),
+                'reservations.date_end': new Date(data['date_of_end'])
+            };
+            // Remove the element from the array and retrieve the removed element
+            doctor_calender_1.default.findOneAndUpdate(query, {
+                $pull: {
+                    reservations: {
+                        patient_id: data['patient_id'],
+                        date_start: new Date(data['date_of_start']),
+                        date_end: new Date(data['date_of_end'])
+                    }
+                }
+            }, { new: true }, // This option returns the updated document
+            (err, removedData) => {
+                if (err) {
+                    console.log(err);
+                    res.status(401).json({
+                        status: 401,
+                        error_message: err
+                    });
+                }
+                else {
+                    if (!removedData) {
+                        console.log(removedData);
+                        res.status(404).json({
+                            status: 404,
+                            error_message: "Document not found"
+                        });
+                    }
+                    else {
+                        // Update the removed element and re-insert it back into the array
+                        console.log("some shit");
+                        const removedReservation = removedData.reservations[0];
+                        removedReservation.cancled = true;
+                        removedReservation.cancled_note = data['text'];
+                        doctor_calender_1.default.updateOne({ doctor_id: data['doctor_id'] }, {
+                            $push: {
+                                reservations: removedReservation
+                            }
+                        }, (err, data) => {
+                            console.log(data);
+                            if (err) {
+                                res.status(401).json({
+                                    status: 401,
+                                    error_message: err
+                                });
+                            }
+                            else {
+                                res.status(200).json({
+                                    status: 200
+                                });
+                            }
+                        });
+                    }
+                }
+            });
+        };
+        this.get_all_reports_for_user = (req, res) => {
+            const user_id = req.body.id;
+            report_1.default.find({ patient_id: user_id }, (err, data) => {
+                if (data) {
+                    res.status(200).
+                        json({
+                        status: 200,
+                        data: data
+                    });
+                }
+                else {
+                    res.status(200).
+                        json({
+                        status: 400,
+                    });
+                }
             });
         };
     }
