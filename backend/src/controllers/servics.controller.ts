@@ -7,46 +7,132 @@ import Offline from "../models/offline_date";
 import ReqNS from "../models/services.request_new_servic"
 import Report from  "../models/report"
 import Calender from "../models/doctor.calender"
-import { constants } from "buffer";
-import { Console } from "console";
+import Servic from "../models/services"
+
 
 export class ServicsController {
 
-    specializzazione_based_services  = (req: express.Request, res: express.Response) => {
+    specializzazione_based_services  = async (req: express.Request, res: express.Response) => {
 
         const token = req.body.token;
         jwt.verify(req.body.token, secret, (err, decoded) => {
             if(decoded){
                 const specializzazione =  decoded["_doc"].d_data["specializzazione"];
                 const id = decoded["_doc"]._id;
-                Spec_servics.findOne({specializzazione:specializzazione}, (err, data)=>{
-                    if(data){
-                        DocSpec_servics.findOne({docotrId: id},(err, data_2)=>{
-                            if(data_2){
-                                res.status(200)
-                                .json({
-                                    status: 200,
-                                    services: data["services"],
-                                    selected: data_2["services"]
-                                })
-                            }else{
-                                res.status(200)
-                                .json({
-                                    status: 200,
-                                    services: data["services"],
-                                    selected: null
-                                })
-                            }
-
-                        })
-                       
-                    }else{                   
-                        res.status(401).json({
-                            status: 401,
-                            error_message: err
-                        });  
+                Spec_servics.aggregate([
+                  {
+                    $match: {
+                      specializzazione: specializzazione
                     }
-                })
+                  },
+                  {
+                    $addFields: {
+                      servicesIds: {
+                        $map: {
+                          input: "$services",
+                          as: "serviceId",
+                          in: {
+                            $toObjectId: "$$serviceId"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  {
+                    $lookup: {
+                      from: "srvices",
+                      localField: "servicesIds",
+                      foreignField: "_id",
+                      as: "matched_services"
+                    }
+                  },
+                  {
+                    $unwind: "$matched_services"
+                  },
+                  {
+                    $project: {
+                      "matched_services._id": 1,
+                      "matched_services.servic_name": 1,
+                      "matched_services.cost": 1,
+                      "matched_services.description": 1,
+                      "matched_services.time": 1
+                    }
+                  }
+                  
+                ])
+                  .exec((err, result_1) => {
+                    if (err) {
+                      console.error(err);
+                      res.status(500).json({
+                        status: 500,
+                        error_message: "Internal Server Error"
+                      });
+                    } else {
+                      DocSpec_servics.aggregate([
+                        {
+                          $match: {
+                            docotrId: id
+                          }
+                        },
+                        {
+                          $unwind: "$services"
+                        },
+                        {
+                          $addFields: {
+                            servicesObjectId: {
+                              $toObjectId: "$services.services_id"
+                            }
+                          }
+                        },
+                        {
+                          $lookup: {
+                            from: "srvices",
+                            localField: "servicesObjectId",
+                            foreignField: "_id",
+                            as: "matched_services"
+                          }
+                        },
+                        {
+                          $unwind: "$matched_services"
+                        },
+                        {
+                          $project: {
+                            "matched_services._id": 1,
+                            "matched_services.servic_name": 1,
+                            "matched_services.cost": 1,
+                            "matched_services.description": 1,
+                            "matched_services.time": 1
+                          }
+                        }
+                      ])
+                        .exec((err, result) => {
+                          
+                          if(result.length>0){
+                            const arr1 = result_1.map(item => item.matched_services);
+                            const arr2 = result.map(item => item.matched_services);
+                            console.log(arr1)
+                          console.log(arr2)
+                            res.status(200)
+                            .json({
+                              status:200,
+                              services: arr1,
+                              selected: arr2
+                            })
+                          }else{
+                            const arr1 = result_1.map(item => item.matched_services);
+                            res.status(200)
+                            .json({
+                              status:200,
+                              services: arr1,
+                              selected: []
+                            })
+                          }
+                        });
+                      
+                    }
+                  });
+                
+              
 
             }else{
                 res.status(401).json({
@@ -62,64 +148,59 @@ export class ServicsController {
         const id = req.body.id;
        
         DocSpec_servics.aggregate([
-            {
-              $match: {
-                docotrId: id
-              }
-            },
-            {
-              $unwind: "$services"
-            },
-            {
-              $lookup: {
-                from: "srvices",
-                localField: "services.servic_name",
-                foreignField: "servic_name",
-                as: "service_info"
-              }
-            },
-            {
-              $unwind: "$service_info"
-            },
-            {
-              $group: {
-                _id: "$_id",
-                docotrId: { $first: "$docotrId" },
-                services: {
-                  $push: {
-                    servic_name: "$services.servic_name",
-                    description: "$services.description",
-                    cost: "$service_info.cost"
-                  }
-                }
+          {
+            $match: {
+              docotrId: id
+            }
+          },
+          {
+            $unwind: "$services"
+          },
+          {
+            $addFields: {
+              servicesObjectId: {
+                $toObjectId: "$services.services_id"
               }
             }
-          ])
+          },
+          {
+            $lookup: {
+              from: "srvices",
+              localField: "servicesObjectId",
+              foreignField: "_id",
+              as: "matched_services"
+            }
+          },
+          {
+            $unwind: "$matched_services"
+          },
+          {
+            $project: {
+              "matched_services._id": 1,
+              "matched_services.servic_name": 1,
+              "matched_services.cost": 1,
+              "matched_services.description": 1,
+              "matched_services.time": 1
+            }
+          }
+        ])
           .exec((err, result) => {
         
-            if (err) {
-                res.status(401)
-                .json({
-                    status: 401,
-                    error_message: err
-                    
-                })
-            } else {
-                if( result[0]!== undefined){                  
-                    res.status(200)
-                    .json({
-                        status: 200,
-                        data: result[0]['services']
-                        
-                    })
-                }else{
-                    res.status(200)
-                    .json({
-                        status: 401,
-                        data: null
-                        
-                    })
-                }
+            if(result.length>0){
+              const arr2 = result.map(item => item.matched_services);
+
+            console.log(arr2)
+              res.status(200)
+              .json({
+                status:200,
+                services: arr2
+              })
+            }else{
+              res.status(200)
+              .json({
+                status:200,
+                services: []
+              })
             }
           });
     }
@@ -129,19 +210,21 @@ export class ServicsController {
     upate_doctor = (req: express.Request, res: express.Response)=>{
         const token = req.body.token
         const data = req.body.data
+        
        jwt.verify(req.body.token, secret, (err, decoded) => {
 
             if(decoded){
                 const id = decoded['_doc']._id
               
                 data.forEach(element => {
+                 
                         if(element.changed == true){
                             if(element.selected == false){
                                DocSpec_servics .updateOne(
                                 { "docotrId": `${id}` },
-                                { $pull: { "services": { "servic_name": `${element.servic_name}` } } }
+                                { $pull: { "services": { "services_id": `${element._id}` } } }
                              ).catch((err)=>{
-                                console.log(err)
+                               
                                 res.status(401)
                                 .json({
                                     status: 401,
@@ -153,9 +236,9 @@ export class ServicsController {
                                 try{
                                     DocSpec_servics.updateOne(
                                         { "docotrId": `${id}`  },
-                                        { $push: { "services": { "servic_name": `${element.servic_name}`, "description": "New service description" } } }
+                                        { $push: { "services": { "services_id": `${element._id}`} } }
                                     ).catch((err)=>{
-                                        console.log(err)
+                                      
                                         res.status(401)
                                         .json({
                                             status: 401,
@@ -467,6 +550,7 @@ export class ServicsController {
                   console.log("some shit")
                   const removedReservation = removedData.reservations[0];
                   removedReservation.cancled = true;
+                  removedReservation.status = 'cancled'
                   removedReservation.cancled_note = data['text'];
           
                   Calender.updateOne(
@@ -594,4 +678,134 @@ export class ServicsController {
             }
           );
     }
+
+
+    set_user_reservation =  (req: express.Request, res: express.Response)=>{
+
+      const doctorId = req.body.doctor_id;
+      const user = req.body.udata;
+      const servic_name = req.body.servic_name;
+      const date_s = new Date(req.body.date_start);
+      const date_e = new Date(req.body.date_end);
+    
+      const paiload = {
+        patient_id: user._id,
+        servics: servic_name,
+        date_start: date_s, 
+        date_end: date_e, 
+        firstname: user.firstname,
+        lastname: user.lastname,
+        status: "ongoing",
+        doctorts_note: false,
+        cancled: false,
+        cancled_note: ""
+      }; 
+  
+      Calender.updateOne(
+        { doctor_id: doctorId },
+        { $push: { reservations: paiload } },
+        (err, result) => {
+          if (err) {
+            res.status(200).
+            json({
+              status: 500,
+              error: "when adding user reservation",
+              error_message: err
+            })
+          } else {
+            if(result){
+              res.status(200).
+              json({
+                status: 200,
+                data: paiload
+              })
+            }else{
+              res.status(200).
+              json({
+                status: 401,
+                error: "when adding user reservation",
+                error_message: err
+              })
+            }
+          }
+        }
+      )
+    
+    }
+
+
+
+    cancle_appoinment_patient = (req: express.Request, res: express.Response)=>{
+      const data = req.body.data
+      console.log('-------cancle_appoinment_patient------')
+      console.log(data)
+      const query = {
+          doctor_id: data['doctor_id'],
+          'reservations.patient_id': data['patient_id'],
+          'reservations.date_start': new Date(data['date_of_start']),
+          'reservations.date_end': new Date(data['date_of_end'])
+        };
+        
+        // Remove the element from the array and retrieve the removed element
+        Calender.findOneAndUpdate(
+          query,
+          {
+            $pull: {
+              reservations: {
+                patient_id: data['patient_id'],
+                date_start: new Date(data['date_of_start']),
+                date_end: new Date(data['date_of_end'])
+              }
+            }
+          },
+          { new: true }, // This option returns the updated document
+          (err, removedData) => {
+            if (err) {
+              console.log(err)
+              res.status(401).json({
+                status: 401,
+                error_message: err
+              });
+            } else {
+              if (!removedData) {
+                  console.log(removedData)
+                res.status(404).json({
+                  status: 404,
+                  error_message: "Document not found"
+                });
+              } else {
+                console.log("some shit patient")
+                console.log(removedData)
+                // Update the removed element and re-insert it back into the array
+                console.log("some shit patient")
+                const removedReservation = data['cal_data']
+                removedReservation.cancled = true;
+                removedReservation.status = 'cancled'
+                console.log(removedReservation)
+                Calender.updateOne(
+                  { doctor_id: data['doctor_id'] },
+                  {
+                    $push: {
+                      reservations: removedReservation
+                    }
+                  },
+                  (err, data) => {
+                      console.log(data)
+                    if (err) {
+                      res.status(401).json({
+                        status: 401,
+                        error_message: err
+                      });
+                    } else {
+                      res.status(200).json({
+                        status: 200
+                      });
+                    }
+                  }
+                );
+              }
+            }
+          }
+        );
+  }
 }

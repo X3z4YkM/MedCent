@@ -44,6 +44,9 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
   my_token: string;
   my_data: PatientProfileData;
   intervalId: any;
+  is_chechk: boolean = false;
+  chechk_value: string= '';
+
   ngOnInit(): void {
     const request = localStorage.getItem('request');
     if (request) {
@@ -63,7 +66,7 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
             .get_doctor_services_pdv(this.req)
             .subscribe((dataS) => {
               if (dataS['status'] === 200) {
-                this.services = dataS['data'];
+                this.services = dataS['services']
 
                 this.service_doctor
                   .get_calender_for_doctor_id(this.req._id)
@@ -71,9 +74,9 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
                     if (data['status'] == 200) {
                       this.calander_data = data['data'];
                       // add to view
-                      this.calander_data = this.calander_data.filter(
-                        (entry) => !entry.cancled
-                      );
+                      // this.calander_data = this.calander_data.filter(
+                      //   (entry) => !entry.cancled
+                      // );
                       const calander_data = this.calander_data.map((entry) => {
                         const dateStart = new Date(entry.date_start);
                         const year = dateStart.getFullYear();
@@ -118,7 +121,15 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
       });
       this.renderCalendar();
 
-      
+      $('.bottom-next').click(function () {
+        $('.popup-background').removeClass('popup-active');
+      });
+
+      $('.workoff_input').click(function () {
+        $(this).removeClass('input-box-empty');
+      });
+
+
       $(".dropdown-select").on('click',function(){
         let span = $(this).find(".select-btn span");
         $(this).find(".select-btn").toggleClass("select-btn-clicked");
@@ -155,6 +166,7 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
         $(".for_cal_res_f").toggle()
         $(".form_calendar").toggle()
       })
+
 
     });
     this.servic_patient.get_expiration_time(sessionStorage.getItem('user_token')).subscribe((response)=>{
@@ -299,7 +311,7 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
       return (
         entryYear === targetYear &&
         entryMonth === targetMonth &&
-        entryDay === targetDay
+        entryDay === targetDay 
       );
     });
 
@@ -336,21 +348,33 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
       this.renderer.addClass(wrapperDivInfo, 'info-container');
 
       const cal_data = this.renderer.createElement('span');
-      this.renderer.appendChild(
-        cal_data,
-        this.renderer.createText(`${firstname} ${lasttane}:  ${start}-${end}`)
-      );
+      if(elemnt.cancled === true){
+        const s = this.renderer.createElement('s')
+        this.renderer.appendChild(
+          s,
+          this.renderer.createText(`${firstname} ${lasttane}:  ${start}-${end}`)
+        )
+        this.renderer.appendChild(
+          cal_data,
+          s
+        );
+      }else{
+        this.renderer.appendChild(
+          cal_data,
+          this.renderer.createText(`${firstname} ${lasttane}:  ${start}-${end}`)
+        );
+      }
       this.renderer.addClass(cal_data, 'time-span');
       this.renderer.appendChild(wrapperDiv, wrapperDivInfo);
       this.renderer.appendChild(wrapperDivInfo, cal_data);
 
       this.date_inspection(elemnt);
 
-      console.log('----------');
-      console.log(elemnt.cancled === false);
-      console.log(this.chechkStatusCancle(elemnt));
-      console.log(elemnt.patient_id === this.my_data._id);
-      console.log('----------');
+      // console.log('----------');
+      // console.log(elemnt.cancled === false);
+      // console.log(this.chechkStatusCancle(elemnt));
+      // console.log(elemnt.patient_id === this.my_data._id);
+      // console.log('----------');
       if (
         elemnt.cancled === false &&
         this.chechkStatusCancle(elemnt) &&
@@ -361,8 +385,49 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
         this.renderer.setAttribute(cancelImg, 'id', 'cancle_date');
         this.renderer.addClass(cancelImg, 'cancel-button');
         this.renderer.appendChild(wrapperDivInfo, cancelImg);
+
+        //remove reservasion logic
         this.renderer.listen(cancelImg, 'click', () => {
-          alert('caceled');
+       
+          const clickedDate = new Date(dateStart);
+          const elem = this.calander_data.find((elemnt)=>{
+              return new Date(elemnt.date_start).getTime() === clickedDate.getTime()
+          })
+          this.servic_patient.cancle_appoinment(this.req._id, this.my_data._id,
+            elem.date_start, elem.date_end, elem
+            ).subscribe((data)=>{
+            if(data['status']===200){
+              elem.cancled = true;
+              elem.status = 'cancled';
+              this.cdr.detectChanges();
+              $('.popup-top').addClass('success');
+                  $('.top-image img').attr(
+                    'src',
+                    '../../assets/icons/MedCent Exclamation.svg'
+                  );
+                  $('.top-message span').text('You have cancled the appoinment!');
+                  $('.bottom-message span').text(
+                    'Thank you for choosing the MedCent'
+                  );
+                  $('.bottom-next span').text(
+                    'close'
+                  );
+    
+                  $('.popup-background').addClass('popup-active');
+            }else{
+              $('.popup-top').removeClass('success');
+              $('.top-image img').attr(
+                'src',
+                '../../assets/icons/MedCent Exclamation.svg'
+              );
+              $('.top-message span').text("Sorry an error accured...");
+              $('.bottom-message span').text('Error something whent wrong while cancling!');
+              $('.bottom-next span').text('Return');
+              $('.popup-background').addClass('popup-active');
+              return
+            }
+          })
+          
         });
       }
 
@@ -392,6 +457,9 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
     }
   }
 
+  my_app_obj: CalanderData = new CalanderData;
+
+
   plus_clikc_logic(cal_data, wrapperDivInfo){
     this.renderer.setStyle(cal_data, 'display', 'none');
     const forCalResDiv = this.renderer.createElement('div');
@@ -416,6 +484,24 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
       this.renderer.addClass(checkboxDiv, 'cehchkboxes_cal');
       const checkboxInput = this.renderer.createElement('input');
       checkboxInput.setAttribute('type', 'checkbox');
+      checkboxInput.setAttribute('value', s._id);
+      
+      this.renderer.listen(checkboxInput, 'change', (event) => {
+        const isChecked = event.target.checked;
+        if (isChecked) {
+          if (!this.is_chechk) {
+            console.log(checkboxInput.value)
+            this.chechk_value = checkboxInput.value
+            this.is_chechk = true;
+            }else{
+            checkboxInput.checked = false;
+          }
+        }else{
+          this.is_chechk = false;
+          this.chechk_value = '';
+        }
+      })
+
       const checkboxText = this.renderer.createText(s.servic_name);
       this.renderer.appendChild(checkboxDiv, checkboxText);
       this.renderer.appendChild(checkboxDiv, checkboxInput);
@@ -423,16 +509,7 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
     }
     this.renderer.appendChild(forCalResDiv, checkboxContainerDiv);
 
-    // Create the div with class 'date' and add the 'Date' input
-    const dateDiv = this.renderer.createElement('div');
-    this.renderer.addClass(dateDiv, 'date');
-    const dateSpan = this.renderer.createElement('span');
-    this.renderer.appendChild(dateSpan, this.renderer.createText('Date:'));
-    const dateInput = this.renderer.createElement('input');
-    dateInput.setAttribute('type', 'date');
-    this.renderer.appendChild(dateDiv, dateSpan);
-    this.renderer.appendChild(dateDiv, dateInput);
-    this.renderer.appendChild(forCalResDiv, dateDiv);
+
 
     // Create the div with class 'time_start' and add the 'Time start' input
     const timeStartDiv = this.renderer.createElement('div');
@@ -449,20 +526,6 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
     this.renderer.appendChild(timeStartDiv, timeStartInput);
     this.renderer.appendChild(forCalResDiv, timeStartDiv);
 
-    // Create the div with class 'time_end' and add the 'Time end' input
-    const timeEndDiv = this.renderer.createElement('div');
-    this.renderer.addClass(timeEndDiv, 'time_end');
-    const timeEndSpan = this.renderer.createElement('span');
-    this.renderer.appendChild(
-      timeEndSpan,
-      this.renderer.createText('Time end:')
-    );
-    const timeEndInput = this.renderer.createElement('input');
-    timeEndInput.setAttribute('type', 'text');
-    timeEndInput.setAttribute('placeholder', 'time end hh:mm..');
-    this.renderer.appendChild(timeEndDiv, timeEndSpan);
-    this.renderer.appendChild(timeEndDiv, timeEndInput);
-    this.renderer.appendChild(forCalResDiv, timeEndDiv);
 
     // Create the div with class 'button_wraper_cal_for' and add the submit and cancel buttons
     const buttonWrapperDiv = this.renderer.createElement('div');
@@ -474,13 +537,138 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
       sendButton,
       this.renderer.createText('submit')
     );
+
+    this.renderer.listen(sendButton, 'click', () => {
+        const servic_id = this.chechk_value;
+        const chechk_obj = this.services.find((elem)=>elem._id === servic_id);
+        const time_start = timeStartInput.value;
+     
+
+        const timeRegex = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
+
+        if (!timeRegex.test(time_start)) {
+          $('.popup-top').removeClass('success');
+          $('.top-image img').attr(
+            'src',
+            '../../assets/icons/MedCent Exclamation.svg'
+          );
+          $('.top-message span').text("Sorry you can't submit...");
+          $('.bottom-message span').text('Pleas enter time corectly!');
+          $('.bottom-next span').text('Return to the form');
+          $('.popup-background').addClass('popup-active');
+          return
+        }
+        if(chechk_obj === undefined){
+          $('.popup-top').removeClass('success');
+          $('.top-image img').attr(
+            'src',
+            '../../assets/icons/MedCent Exclamation.svg'
+          );
+          $('.top-message span').text("Sorry you can't submit...");
+          $('.bottom-message span').text('Pleas select servic!');
+          $('.bottom-next span').text('Return to the form');
+          $('.popup-background').addClass('popup-active');
+          return
+        }
+        const time_end = chechk_obj.time;
+
+        // chchk if time selected can be used 
+        const pElement = this.el.nativeElement.querySelector('#currDate');
+        const text = pElement.textContent.trim();
+        console.log(text);
+        const [day, month, year] = text.split(".").map(Number);
+        const [houres_s, minutes_s] = time_start.split(":").map(Number);
+        const [houres_e, minutes_e] = time_end.split(":").map(Number);
+        const inputDateStart = new Date(year, month - 1, day, houres_s, minutes_s);
+        const inputDateEnd = new Date(inputDateStart);
+        inputDateEnd.setHours(inputDateEnd.getHours() + houres_e);
+        inputDateEnd.setMinutes(inputDateEnd.getMinutes() + minutes_e);
+        
+        const overlappingDates = this.calander_data.filter(data => {
+          const dateStart = new Date(data.date_start);
+          const dateEnd = new Date(data.date_end);
+          return this.checkOverlap(inputDateStart, inputDateEnd, dateStart, dateEnd)&& data.cancled===false;
+        });
+        
+        if(overlappingDates.length>0){
+          $('.popup-top').removeClass('success');
+          $('.top-image img').attr(
+            'src',
+            '../../assets/icons/MedCent Exclamation.svg'
+          );
+          $('.top-message span').text("Sorry you can't submit...");
+          $('.bottom-message span').text('Date is overlapping!');
+          $('.bottom-next span').text('Return to the form');
+          $('.popup-background').addClass('popup-active');
+          return
+        }else{
+            this.servic_patient.add_reservations(
+             this.req._id,  this.my_data, 
+             chechk_obj.servic_name, inputDateStart,
+             inputDateEnd
+            ).subscribe((data)=>{
+                if(data['status'] === 200){
+                  $('.popup-top').addClass('success');
+                  $('.top-image img').attr(
+                    'src',
+                    '../../assets/icons/MedCent Exclamation.svg'
+                  );
+                  $('.top-message span').text('You have added new workoff dates!');
+                  $('.bottom-message span').text(
+                    'Thank you for choosing the MedCent'
+                  );
+                  $('.bottom-next span').text(
+                    'close'
+                  );
+    
+                  $('.popup-background').addClass('popup-active');
+                  this.calander_data.push(data['data']);
+                  this.cdr.detectChanges();
+                  this.renderer.setStyle(cal_data, 'display', 'block');
+                  this.destrory_parent_class('add-container');
+                  this.is_chechk = false;
+
+                }else{
+                  if(data['status'] === 500){
+                    $('.popup-top').removeClass('success');
+                    $('.top-image img').attr(
+                      'src',
+                      '../../assets/icons/MedCent Exclamation.svg'
+                    );
+                    $('.top-message span').text("Sorry you can't submit...");
+                    $('.bottom-message span').text('Server side error!');
+                    $('.bottom-next span').text('Return to the form');
+                    $('.popup-background').addClass('popup-active');
+                    return
+                  }else{
+                    $('.popup-top').removeClass('success');
+                    $('.top-image img').attr(
+                      'src',
+                      '../../assets/icons/MedCent Exclamation.svg'
+                    );
+                    $('.top-message span').text("Sorry you can't submit...");
+                    $('.bottom-message span').text('Error when updating!');
+                    $('.bottom-next span').text('Return to the form');
+                    $('.popup-background').addClass('popup-active');
+                    return
+                  }
+                }
+            })
+        }
+        
+
+    })
+
+
+
     this.renderer.appendChild(sendDiv, sendButton);
     const cancelDiv = this.renderer.createElement('div');
     this.renderer.addClass(cancelDiv, 'cancle');
-
+    // cacnle form logic 
     this.renderer.listen(cancelDiv, 'click', () => {
       this.renderer.setStyle(cal_data, 'display', 'block');
       this.destrory_parent_class('add-container');
+      this.is_chechk = false;
     });
 
     const cancelButton = this.renderer.createElement('button');
@@ -497,7 +685,9 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
     this.renderer.appendChild(wrapperDivInfo, forCalResDiv);
   }
 
-
+  checkOverlap(start1, end1, start2, end2) {
+    return (start1 < end2) && (end1 > start2);
+  }
 
   isDateInPast(dd, mm, yyyy) {
     const dateObject = new Date(`${yyyy}-${mm}-${dd}`);
@@ -513,6 +703,146 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
     )
       return true;
     else return false;
+  }
+
+
+  submit_form(){
+        const servic_id = this.selectedService;
+        const chechk_obj = this.services.find((elem)=>elem._id === servic_id);
+        const time_start = $('#time_start_form').val() as string
+     
+
+        const timeRegex = /^(?:[01]\d|2[0-3]):[0-5]\d$/;
+
+        if (!timeRegex.test(time_start)) {
+          $('.popup-top').removeClass('success');
+          $('.top-image img').attr(
+            'src',
+            '../../assets/icons/MedCent Exclamation.svg'
+          );
+          $('.top-message span').text("Sorry you can't submit...");
+          $('.bottom-message span').text('Pleas enter time corectly!');
+          $('.bottom-next span').text('Return to the form');
+          $('.popup-background').addClass('popup-active');
+          return
+        }
+        if(chechk_obj === undefined){
+          $('.popup-top').removeClass('success');
+          $('.top-image img').attr(
+            'src',
+            '../../assets/icons/MedCent Exclamation.svg'
+          );
+          $('.top-message span').text("Sorry you can't submit...");
+          $('.bottom-message span').text('Pleas select servic!');
+          $('.bottom-next span').text('Return to the form');
+          $('.popup-background').addClass('popup-active');
+          return
+        }
+        const time_end = chechk_obj.time;
+        const selected_date = $("#data_form").val() as string
+        
+        const result = this.isDateInFutureOrCurrent(selected_date);
+
+        if(!result){
+          $('.popup-top').removeClass('success');
+          $('.top-image img').attr(
+            'src',
+            '../../assets/icons/MedCent Exclamation.svg'
+          );
+          $('.top-message span').text("Sorry you can't submit...");
+          $('.bottom-message span').text('Pleas select servic!');
+          $('.bottom-next span').text('Return to the form');
+          $('.popup-background').addClass('popup-active');
+          return
+        }
+
+        const [year, month, day] = selected_date.split("-").map(Number);
+        const [houres_s, minutes_s] = time_start.split(":").map(Number);
+        const [houres_e, minutes_e] = time_end.split(":").map(Number);
+        const inputDateStart = new Date(year, month - 1, day, houres_s, minutes_s);
+        const inputDateEnd = new Date(inputDateStart);
+        inputDateEnd.setHours(inputDateEnd.getHours() + houres_e);
+        inputDateEnd.setMinutes(inputDateEnd.getMinutes() + minutes_e);
+        
+        const overlappingDates = this.calander_data.filter(data => {
+          const dateStart = new Date(data.date_start);
+          const dateEnd = new Date(data.date_end);
+          return this.checkOverlap(inputDateStart, inputDateEnd, dateStart, dateEnd) && data.cancled===false;
+        });
+        
+        if(overlappingDates.length>0){
+          $('.popup-top').removeClass('success');
+          $('.top-image img').attr(
+            'src',
+            '../../assets/icons/MedCent Exclamation.svg'
+          );
+          $('.top-message span').text("Sorry you can't submit...");
+          $('.bottom-message span').text('Date is overlapping!');
+          $('.bottom-next span').text('Return to the form');
+          $('.popup-background').addClass('popup-active');
+          return
+        }else{
+          this.servic_patient.add_reservations(
+            this.req._id,  this.my_data, 
+            chechk_obj.servic_name, inputDateStart,
+            inputDateEnd
+           ).subscribe((data)=>{
+               if(data['status'] === 200){
+                 $('.popup-top').addClass('success');
+                 $('.top-image img').attr(
+                   'src',
+                   '../../assets/icons/MedCent Exclamation.svg'
+                 );
+                 $('.top-message span').text('You have added new workoff dates!');
+                 $('.bottom-message span').text(
+                   'Thank you for choosing the MedCent'
+                 );
+                 $('.bottom-next span').text(
+                   'close'
+                 );
+   
+                 $('.popup-background').addClass('popup-active');
+                 this.calander_data.push(data['data']);
+                 this.cdr.detectChanges();
+                 this.is_chechk = false;
+                 $(".for_cal_res_f input[type='checkbox']").prop("checked", false);
+
+               }else{
+                 if(data['status'] === 500){
+                   $('.popup-top').removeClass('success');
+                   $('.top-image img').attr(
+                     'src',
+                     '../../assets/icons/MedCent Exclamation.svg'
+                   );
+                   $('.top-message span').text("Sorry you can't submit...");
+                   $('.bottom-message span').text('Server side error!');
+                   $('.bottom-next span').text('Return to the form');
+                   $('.popup-background').addClass('popup-active');
+                   return
+                 }else{
+                   $('.popup-top').removeClass('success');
+                   $('.top-image img').attr(
+                     'src',
+                     '../../assets/icons/MedCent Exclamation.svg'
+                   );
+                   $('.top-message span').text("Sorry you can't submit...");
+                   $('.bottom-message span').text('Error when updating!');
+                   $('.bottom-next span').text('Return to the form');
+                   $('.popup-background').addClass('popup-active');
+                   return
+                 }
+               }
+           })
+        }
+
+  }
+
+  isDateInFutureOrCurrent(inputDateString) {
+    const inputDate = new Date(inputDateString);
+    const currentDate = new Date();
+  
+    // Compare the dates
+    return inputDate >= currentDate;
   }
 
   chechkStatusCancle(element) {
@@ -536,14 +866,14 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
     if (
       currentDate.getFullYear() === startDate.getFullYear() &&
       currentDate.getMonth() === startDate.getMonth() &&
-      currentDate.getDay() === startDate.getDay()
+      currentDate.getDate() === startDate.getDate()
     ) {
       element.status = 'current';
       flag = 1;
     } else if (
       currentDate.getFullYear() > startDate.getFullYear() &&
       currentDate.getMonth() > startDate.getMonth() &&
-      currentDate.getDay() > startDate.getDay()
+      currentDate.getDate() > startDate.getDate()
     ) {
       element.status = 'finished';
       flag = 1;
@@ -584,4 +914,10 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
       this.plus_clikc_logic(clonedFirstChild, wrapperDivInfo)
     });
   }
+  selectedService: string = null;
+
+  chechk_data(serviceId: string) {
+    this.selectedService = serviceId;
+  }
+
 }

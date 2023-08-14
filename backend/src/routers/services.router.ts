@@ -38,4 +38,12 @@ servicsRouter.route('/appointment/update/date').post(
 	(req, res) => new ServicsController().update_dates(req, res)
 )
 
+servicsRouter.route('/user/set/reservation').post(
+	(req, res) => new ServicsController().set_user_reservation(req, res)
+)
+
+servicsRouter.route('/appointment/cancle/patient').post(
+	(req, res) => new ServicsController().cancle_appoinment_patient(req, res)
+)
+
 export default servicsRouter

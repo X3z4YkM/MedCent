@@ -58,7 +58,8 @@
           <div *ngFor="let s of services" class="services_wrrapper">
             <span class="label">Service name: {{ s.servic_name }}</span>
             <span class="label">Service cost: {{ s.cost }}</span>
-            <span class="label">Service name: {{ s.description }}</span>
+            <span class="label">Service description: {{ s.description }}</span>
+            <span class="label">Service max time: {{ s.time }}</span>
           </div>
         </div>
       </div>
@@ -67,7 +68,7 @@
 
     <div class="container">
       <div class="title_title">
-        <h2>What to make an appointment?</h2>
+        <h2>Whant to make an appointment?</h2>
       </div>
       <hr />
       <div class="selector">
@@ -131,31 +132,34 @@
               Close
             </button>
           </div>
-        </div>
-      </div>
-      <div class="normal_form"></div>
-      <div class="popup-background">
-        <div class="popup-container">
-          <div class="popup-top">
-            <div class="top-image">
-              <img id="topimg" />
-            </div>
 
-            <div class="top-message">
-              <span></span>
+        
+          <div class="popup-background">
+            <div class="popup-container">
+              <div class="popup-top">
+                <div class="top-image">
+                  <img id="topimg" />
+                </div>
+
+                <div class="top-message">
+                  <span></span>
+                </div>
+              </div>
+              <div class="popup-bottom">
+                <div class="bottom-message">
+                  <pre class="preclass"><span></span></pre>
+                </div>
+                <div class="bottom-next">
+                  <span></span>
+                </div>
+              </div>
             </div>
           </div>
-          <div class="popup-bottom">
-            <div class="bottom-message">
-              <pre class="preclass"><span></span></pre>
-            </div>
-            <div class="bottom-next">
-              <span></span>
-            </div>
-          </div>
+
+
         </div>
       </div>
-
+      
       <div class="for_cal_res_f">
         <div class="f_title">
           <span>Fill in the form</span>
@@ -167,29 +171,52 @@
           </div>
           <div class="checkbox_cla_container">
             <div class="cehchkboxes_cal" *ngFor="let s of services">
-              {{ s.servic_name }} <input type="checkbox" />
+              {{ s.servic_name }} 
+              <input
+                (change)="chechk_data(s._id.toString())"
+                type="checkbox"
+                [checked]="selectedService === s._id"
+                [value]="s._id"
+              />
             </div>
-
           </div>
           <div class="date">
             <span>Date: </span>
-            <input type="date" />
+            <input id="data_form" type="date" />
           </div>
           <div class="time_start_f">
             <span>Time start: </span>
-            <input type="text" placeholder="time start.." />
+            <input id="time_start_form" type="text" placeholder="time start.." />
           </div>
-          <div class="time_end_f">
-            <span>Time end: </span>
-            <input type="text" placeholder="time start.." />
-          </div>
+
           <div class="button_wraper_cal_for">
             <div class="send">
-              <button>submit</button>
+              <button (click)="submit_form()">submit</button>
             </div>
           </div>
         </div>
       </div>
+      <div class="popup-background">
+            <div class="popup-container">
+              <div class="popup-top">
+                <div class="top-image">
+                  <img id="topimg" />
+                </div>
+
+                <div class="top-message">
+                  <span></span>
+                </div>
+              </div>
+              <div class="popup-bottom">
+                <div class="bottom-message">
+                  <pre class="preclass"><span></span></pre>
+                </div>
+                <div class="bottom-next">
+                  <span></span>
+                </div>
+              </div>
+            </div>
+          </div>
     </div>
   </body>
 </html>

@@ -16,5 +16,7 @@ servicsRouter.route('/report/generate').post((req, res) => new servics_controlle
 servicsRouter.route('/appointment/cancle/doctor').post((req, res) => new servics_controller_1.ServicsController().cancle_appoinment_docotr(req, res));
 servicsRouter.route('/reports/user/get').post((req, res) => new servics_controller_1.ServicsController().get_all_reports_for_user(req, res));
 servicsRouter.route('/appointment/update/date').post((req, res) => new servics_controller_1.ServicsController().update_dates(req, res));
+servicsRouter.route('/user/set/reservation').post((req, res) => new servics_controller_1.ServicsController().set_user_reservation(req, res));
+servicsRouter.route('/appointment/cancle/patient').post((req, res) => new servics_controller_1.ServicsController().cancle_appoinment_patient(req, res));
 exports.default = servicsRouter;
 //# sourceMappingURL=services.router.js.map

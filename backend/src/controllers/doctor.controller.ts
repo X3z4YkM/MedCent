@@ -281,13 +281,12 @@ export class DoctorController {
 
   get_doctor_calender_id = (req: express.Request, res: express.Response) => {
     const id = req.body.token;
-    console.log(id)
-    console.log(id)
+
     Calender.findOne({ doctor_id: id }, (err, data) => {
       // calender for docotr exists
       if (data) {
         // all is good my
-        console.log(data)
+       
         res.status(200).json({
           status: 200,
           message: "found calender for doctor",

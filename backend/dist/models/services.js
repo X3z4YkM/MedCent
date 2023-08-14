@@ -15,6 +15,12 @@ let Servic = new Schema({
     },
     cost: {
         type: mongodb_1.Decimal128
+    },
+    time: {
+        type: Number
+    },
+    description: {
+        type: String
     }
 });
 exports.default = mongoose_1.default.model('Servic', Servic, 'srvices');

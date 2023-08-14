@@ -15,6 +15,12 @@ let Servic = new Schema({
     },
     cost: {
         type: Decimal128
+    },
+    time: {
+        type: Number
+    },
+    description:{
+        type: String
     }
 
 })

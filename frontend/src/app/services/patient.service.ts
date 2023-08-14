@@ -48,4 +48,31 @@ export class PatientService {
     return this.http.post(`${this.uri}/patients/user/get/id`,data);
   }
 
+  add_reservations(doctorId, user_data, service_name,ds:Date, de:Date){
+    const data = {
+      doctor_id: doctorId,
+      udata: user_data,
+      servic_name: service_name,
+      date_start: ds,
+      date_end: de
+    }
+    console.log(data)
+    return this.http.post(`${this.uri}/servics/user/set/reservation`,data);
+  }
+
+  cancle_appoinment(did,pid,ds,de,obj){
+    const paiload = {
+      doctor_id: did,
+      patient_id: pid,
+      date_of_start: ds,
+      date_of_end: de,
+      cal_data :obj
+    }
+    const data = {
+      data: paiload
+    }
+    return this.http.post(`${this.uri}/servics/appointment/cancle/patient`,data);
+  }
+
+
 }

@@ -9,4 +9,5 @@ export class CalanderData{
     doctorts_note: boolean;
     status: string;
     cancled: boolean;
+    cancled_note: string;
 }

@@ -80,12 +80,12 @@ export class DoctorComponent implements OnInit, OnDestroy {
               this.fake_docot = {... this.doctor}
               this.servic.getSpecServicData(token).subscribe((data)=>{
                   if(data['status']===200){
-                    
+
                     this.services = data['services'].map(elem=>{
                       return{
-                        servic_name: elem,
-                        selected: data['selected'].find((inner)=>{
-                          if(inner.servic_name === elem ){
+                        ...elem,
+                        selected: data['selected'].find((inner) =>{
+                          if(inner.servic_name === elem.servic_name ){
                             return elem
                           }
                         })? true: false,
