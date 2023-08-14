@@ -235,7 +235,7 @@ export class UserController {
           message: "Token has expired",
         });
       } else {
-        console.log(12);
+        
         res.status(200).json({
           status: 200,
           casue: "Chechking sesssion expirtaion",

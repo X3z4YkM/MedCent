@@ -57,7 +57,6 @@ export class GuestComponent implements OnInit, OnDestroy{
     });
 
 
-
     })
   }
 

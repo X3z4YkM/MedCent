@@ -8,6 +8,7 @@ import ReqNS from "../models/services.request_new_servic"
 import Report from  "../models/report"
 import Calender from "../models/doctor.calender"
 import { constants } from "buffer";
+import { Console } from "console";
 
 export class ServicsController {
 
@@ -56,6 +57,73 @@ export class ServicsController {
           });
 
     }
+
+    pet_doc_specializzazione_based_services = (req: express.Request, res: express.Response) => {
+        const id = req.body.id;
+       
+        DocSpec_servics.aggregate([
+            {
+              $match: {
+                docotrId: id
+              }
+            },
+            {
+              $unwind: "$services"
+            },
+            {
+              $lookup: {
+                from: "srvices",
+                localField: "services.servic_name",
+                foreignField: "servic_name",
+                as: "service_info"
+              }
+            },
+            {
+              $unwind: "$service_info"
+            },
+            {
+              $group: {
+                _id: "$_id",
+                docotrId: { $first: "$docotrId" },
+                services: {
+                  $push: {
+                    servic_name: "$services.servic_name",
+                    description: "$services.description",
+                    cost: "$service_info.cost"
+                  }
+                }
+              }
+            }
+          ])
+          .exec((err, result) => {
+        
+            if (err) {
+                res.status(401)
+                .json({
+                    status: 401,
+                    error_message: err
+                    
+                })
+            } else {
+                if( result[0]!== undefined){                  
+                    res.status(200)
+                    .json({
+                        status: 200,
+                        data: result[0]['services']
+                        
+                    })
+                }else{
+                    res.status(200)
+                    .json({
+                        status: 401,
+                        data: null
+                        
+                    })
+                }
+            }
+          });
+    }
+
 
 
     upate_doctor = (req: express.Request, res: express.Response)=>{
@@ -447,5 +515,83 @@ export class ServicsController {
 
     }
 
-
+    update_dates = (req: express.Request, res: express.Response)=>{
+        const data = req.body.date
+        const doctorid = req.body.doctorid
+        console.log("-----update_dates----")
+        console.log(data)
+        console.log(doctorid)
+        console.log(data['patient_id'])
+        console.log(new Date(data['date_start']))
+        console.log(new Date(data['date_end']))
+        const query = {
+            doctor_id: doctorid,
+            'reservations.patient_id': data['patient_id'],
+            'reservations.date_start': new Date(data['date_start']),
+            'reservations.date_end': new Date(data['date_end'])
+          };
+          
+          // Remove the element from the array and retrieve the removed element
+          Calender.findOneAndUpdate(
+            query,
+            {
+              $pull: {
+                reservations: {
+                  patient_id: data['patient_id'],
+                  date_start: new Date(data['date_start']),
+                  date_end: new Date(data['date_end'])
+                }
+              }
+            },
+            { new: true }, // This option returns the updated document
+            (err, removedData) => {
+              if (err) {
+                console.log(err)
+                res.status(401).json({
+                  status: 401,
+                  error_message: err
+                });
+              } else {
+                if (!removedData) {
+                    console.log('here error')
+                    console.log(removedData)
+                  res.status(404).json({
+                    status: 404,
+                    error_message: "Document not found"
+                  });
+                } else {
+                  // Update the removed element and re-insert it back into the array
+                  console.log("some shit")
+                    data['date_start'] = new Date(data['date_start'])
+                    data['date_end'] = new Date(data['date_end'])
+                  const removedReservation = data
+                  console.log(removedReservation)
+                  Calender.updateOne(
+                    { doctor_id: doctorid },
+                    {
+                      $push: {
+                        reservations: removedReservation
+                      }
+                    },
+                    (err, data) => {
+                      
+                        console.log(data)
+                      if (err) {
+                        console.log("here 2 error")
+                        res.status(401).json({
+                          status: 401,
+                          error_message: err
+                        });
+                      } else {
+                        res.status(200).json({
+                          status: 200
+                        });
+                      }
+                    }
+                  );
+                }
+              }
+            }
+          );
+    }
 }

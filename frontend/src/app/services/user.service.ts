@@ -58,5 +58,7 @@ export class UserService{
     }
     return this.http.post(`${this.uri}/users/update_status`,data);
   }
+  
+ 
 
 }

@@ -11,6 +11,7 @@ const user_routes_1 = __importDefault(require("./routers/user.routes"));
 const doctor_router_1 = __importDefault(require("./routers/doctor.router"));
 const manager_router_1 = __importDefault(require("./routers/manager.router"));
 const services_router_1 = __importDefault(require("./routers/services.router"));
+const patinet_router_1 = __importDefault(require("./routers/patinet.router"));
 const app = (0, express_1.default)();
 app.use((0, cors_1.default)());
 app.use(body_parser_1.default.json());
@@ -27,6 +28,7 @@ router.use('/users', user_routes_1.default);
 router.use('/doctors', doctor_router_1.default);
 router.use('/manager', manager_router_1.default);
 router.use('/servics', services_router_1.default);
+router.use('/patients', patinet_router_1.default);
 app.use('/', router);
 app.listen(4000, () => console.log(`Express server running on port 4000`));
 //# sourceMappingURL=server.js.map

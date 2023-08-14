@@ -18,4 +18,9 @@ doctorRouter.route('/calender/get').post(
 	(req, res) => new DoctorController().get_doctor_calender(req,res)
 )
 
+doctorRouter.route('/calender/get/id').post(
+	(req, res) => new DoctorController().get_doctor_calender_id(req,res)
+)
+
+
 export default doctorRouter

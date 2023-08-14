@@ -126,26 +126,39 @@
         </div>
 
 
-        <div class="flex_container">
+        <div class="flex_containerdoc">
             <div *ngFor="let d of doctors" class="container_table_inner">
                     
-                    <table class="">
-                        <tr>
-                            <th></th>
-                            <th>Firstname</th>
-                            <th>Lastname</th>
-                            <th>Specializzazione</th>
-                        </tr>
+                <div class="tabledoc">
+                    <div class="trdoc" >
                         
-                        <td><img [src]="d.img_path" class="img_doc" d.alt="+"></td>
-                        <td class="info"><span>{{d.firstname}}</span></td>
-        
-                        <td class="info"><span>{{d.lastname}}</span></td>
-                        <td class="info"><span>{{d.specializzazione}}</span></td>
-                    </table>
+                        <img  [src]="d.img_path" d.alt="+" class="user-imagedoc">
+                
+                        <div class="datadoc" >
+                            <div>
+                                <span class="labeldoc">Firstname:</span>  
+                                <span >{{d.firstname}}</span>
+                               
+                            </div>
+                            <div>
+                                <span class="labeldoc">Lastname:</span>  
+                                <span >{{d.lastname}}</span>
+                            
+                            </div>
+                            <div>
+                                <span class="labeldoc">Specializzazione:</span>  
+                                <span >{{d.specializzazione}}</span>
+                               
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <hr>
             </div>
         </div>
+        
+
+
     </div>
    
 

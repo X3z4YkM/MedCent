@@ -553,7 +553,7 @@ export class DoctorComponent implements OnInit, OnDestroy {
             return
           }
           const data =  this.createCancelData(elemnt, text);
-          console.log(data)
+         
           this.servic.cancle_op_as_doc(data).subscribe((data)=>{
               if(data['status'] === 200){
                 inputField.style.display = 'none';
@@ -1049,4 +1049,7 @@ export class DoctorComponent implements OnInit, OnDestroy {
   hide_rep_button(){
     this.el.nativeElement.querySelector(".report_data_container").style.visibility = "hidden"
   }
+
+
+
 }

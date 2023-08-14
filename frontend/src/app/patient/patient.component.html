@@ -1,2 +1,244 @@
-<p>patient works!</p>
-<img src="" alt="+">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedCent</title>
+</head> 
+<body>
+    <div class="header">
+        <img src="../../assets/icons/Mediamodifier-Design.svg" alt="MedCent" class="logo">
+        <h2 class="title_name">MedCent</h2>
+        <div class="optiosn">
+            <div class="option_profile active">
+                <button data-target = "div_profile">Profile</button>
+            </div>
+            <div class="option_doctors">
+                <button data-target = "div_doctors">Doctors</button>
+            </div>
+            <div class="option_noti">
+                <button data-target = "div_noti">Notifications</button>
+            </div>
+            <div class="option_logout">
+                <button (click)="logout()">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="div_profile" class="container">
+        <div class="table">
+            <div class="tr" >
+                
+                <img *ngIf="patient.edit != true" [src]="patient.img_path" d.alt="+" class="user-image">
+
+                <div *ngIf="patient.edit == true " class="avatar-container">
+                    <div class="image-container" *ngIf="getUser().file; else placeholder"
+                    [ngStyle]="{backgroundImage: 'url(' + getUser().file + ')'}">
+                    </div>
+                
+                    <ng-template #placeholder>
+                        <div class="image-container avatar-placeholder">
+                        </div>
+                    </ng-template>
+                
+                    <label for="avatar-input-file">
+                        <div class="icon-wrapper">
+                            <input type="file" id="avatar-input-file" accept="image/*" (change)="onFileChange($event)" />
+                            <mat-icon class="icon" fontIcon="edit">edit</mat-icon>
+                        </div>
+                    </label>
+                
+                </div>
+
+                <div class="data" >
+                    <div>
+                        <span class="label">Firstname:</span>  
+                        <span *ngIf="patient.edit != true">{{patient.firstname}}</span>
+                        <input *ngIf="patient.edit == true" value="{{patient.firstname}}" placeholder="{{patient.firstname}}" [(ngModel)]="getUser().firstname">
+                    </div>
+                    <div>
+                        <span class="label">Lastname:</span>  
+                        <span *ngIf="patient.edit != true">{{patient.lastname}}</span>
+                        <input *ngIf="patient.edit == true" value="{{patient.lastname}}" placeholder="{{patient.lastname}}" [(ngModel)]="getUser().lastname">
+                    </div>
+                    <div>
+                        <span class="label">Address:</span>  
+                        <span *ngIf="patient.edit != true">{{patient.address}}</span>
+                        <input *ngIf="patient.edit == true" value="{{patient.address}}" placeholder="{{patient.address}}"[(ngModel)]="getUser().address">
+                    </div>
+                    <div>
+                        <span class="label">phone:</span>  
+                        <span *ngIf="patient.edit != true">{{patient.mobile_phone}}</span>
+                        <input *ngIf="patient.edit == true" value="{{patient.mobile_phone}}" placeholder="{{patient.mobile_phone}}"[(ngModel)]="getUser().mobile_phone">
+                    </div>
+                    <div>
+                        <span class="label">Email:</span>  
+                        <span *ngIf="patient.edit != true">{{patient.email}}</span>
+                        <input *ngIf="patient.edit == true" value="{{patient.email}}" placeholder="{{patient.email}}"[(ngModel)]="getUser().email">
+                    </div>
+                    <div class="buttons-container">
+                        <div *ngIf="patient.edit != true" class="button">
+                                <button class="edit" (click)="edit_mode()">edit</button>
+                        </div>
+                        <div *ngIf="patient.edit == true" class="button">
+                            <button class="edit" (click)="save_mode()" >save</button>
+                        </div>
+                        <div *ngIf="patient.edit == true" class="button">
+                            <button class="delete" (click)="view_mode()" >cancle</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <div id="div_doctors" class="containernowrap">
+        
+        <div class="header-search">
+            <div class="search-bar">
+                <img src="../../assets//icons/Mediamodifier-Design.svg" class="search-image">
+                <input type="text" name="input-search" id="header-search" placeholder="Search" maxlength="33">
+            </div>
+            <div class="dropdown-search">
+                <div class="search-scroll">
+                    <div class="search-option-title">
+                        <div>
+                        <span class="search-options">Search Options</span>
+                        </div>   
+                        
+                    </div>
+                 
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">firstname: </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">lastname: </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">specializzazione: </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">office_branch: </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-option-title">
+                        <div>
+                        <span class="search-options">Filter Options</span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterASC firstname </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterASC lastname </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterASC specializzazione </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterASC office_branch </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterDESC firstname </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterDESC lastname </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterDESC specializzazione </span>
+                        </div>   
+                    </div>
+                    <hr>
+                    <div class="search-user">
+                        <div>
+                        <span class="option">FilterDESC office_branch </span>
+                        </div>   
+                    </div>
+                    <hr>
+
+                </div>
+                
+            </div>
+        </div>
+
+
+        <div class="flex_containerdoc">
+            <div *ngFor="let d of doctors" class="container_table_inner">
+                    
+                <div class="tabledoc">
+                    <div class="trdoc" >
+                        
+                        <img  [src]="d.img_path" d.alt="+" class="user-imagedoc">
+                
+                        <div class="datadoc">
+                            <div>
+                                <span class="labeldoc">Firstname:</span>  
+                                <span >{{d.firstname}}</span>
+                               
+                            </div>
+                            <div>
+                                <span class="labeldoc">Lastname:</span>  
+                                <span >{{d.lastname}}</span>
+                            
+                            </div>
+                            <div>
+                                <span class="labeldoc">Specializzazione:</span>  
+                                <span >{{d.specializzazione}}</span>
+                               
+                            </div>
+                            <div>
+                                <span class="labeldoc">Office Branch:</span>  
+                                <span >{{d.office_branch}}</span>
+                               
+                            </div>
+                            <div>
+                                <button class="view_button" (click)="view_profile(d.doctor_id)">view profile</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+            </div>
+        </div>
+
+    </div>
+    <div id="div_noti" class="container">
+        omthing3
+    </div>
+    
+</body>
+</html>

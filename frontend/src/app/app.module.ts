@@ -16,7 +16,7 @@ import {MatButtonModule,} from  '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { GuestComponent } from './guest/guest.component';
 import { UserProfileViewComponent } from './user-profile-view/user-profile-view.component';
-
+import { DoctorProfileViewComponent } from './doctor-profile-view/doctor-profile-view.component';
 
 
 @NgModule({
@@ -29,8 +29,8 @@ import { UserProfileViewComponent } from './user-profile-view/user-profile-view.
     PatientComponent,
     MenagerComponent,
     GuestComponent,
-    UserProfileViewComponent
-    
+    UserProfileViewComponent,
+    DoctorProfileViewComponent
   ],
   imports: [
     BrowserModule,

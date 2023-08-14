@@ -38,31 +38,31 @@ const secret = "12g47JNBAbBVHJDA423ascH7bjqb6574gyiu67rKNjn9B";
 class DoctorController {
     constructor() {
         this.get_all = (req, res) => {
-            user_1.default.find({ type: 'Doctor', status: "true" }, (err, data) => {
+            user_1.default.find({ type: "Doctor", status: "true" }, (err, data) => {
                 if (data) {
-                    let new_data = data.map(doctor => {
-                        const path_to_images = path_1.default.join(__dirname, `../../src/assets/profile_pictures/${doctor['img_src']}`);
+                    let new_data = data.map((doctor) => {
+                        const path_to_images = path_1.default.join(__dirname, `../../src/assets/profile_pictures/${doctor["img_src"]}`);
                         let image = fs.readFileSync(path_to_images);
                         return {
-                            firstname: doctor['firstname'],
-                            lastname: doctor['lastname'],
-                            specializzazione: doctor['d_data'].specializzazione,
-                            img_profile: image
+                            firstname: doctor["firstname"],
+                            lastname: doctor["lastname"],
+                            specializzazione: doctor["d_data"].specializzazione,
+                            office_branch: doctor["d_data"].office_branch,
+                            doctor_id: doctor["_id"],
+                            img_profile: image,
                         };
                     });
-                    res.status(200)
-                        .json({
+                    res.status(200).json({
                         status: 200,
                         executed: "getting all docotrs from db",
-                        doctors: new_data
+                        doctors: new_data,
                     });
                 }
                 else {
-                    res.status(401)
-                        .json({
+                    res.status(401).json({
                         status: 401,
                         executed: "error happened when getting all doctors ",
-                        error_message: err
+                        error_message: err,
                     });
                 }
             });
@@ -81,7 +81,7 @@ class DoctorController {
                 else {
                     res.status(401).json({
                         status: 401,
-                        error_message: err
+                        error_message: err,
                     });
                 }
             });
@@ -94,8 +94,8 @@ class DoctorController {
                     console.log(11);
                     const updateFields = {};
                     Object.keys(data).forEach((key) => {
-                        if (key !== '_id') {
-                            if (key === 'd_data') {
+                        if (key !== "_id") {
+                            if (key === "d_data") {
                                 let indic = false;
                                 Object.keys(data[key]).forEach((key_iner) => {
                                     if (data[key][key_iner] !== new_user_data[key][key_iner]) {
@@ -112,9 +112,11 @@ class DoctorController {
                                 if (data[key] !== new_user_data[key]) {
                                     updateFields[key] = new_user_data[key];
                                     if (key === "username") {
-                                        let extension = data["img_src"].split('.')[1];
+                                        let extension = data["img_src"].split(".")[1];
                                         updateFields["img_src"] = `${new_user_data.username}.${extension}`;
-                                        Promise.all([this.renameFilePromise(data["img_src"], updateFields["img_src"])]);
+                                        Promise.all([
+                                            this.renameFilePromise(data["img_src"], updateFields["img_src"]),
+                                        ]);
                                         console.log(updateFields["img_src"]);
                                         console.log(data["img_src"]);
                                     }
@@ -141,8 +143,7 @@ class DoctorController {
                     }
                     if (Object.keys(updateFields).length === 0) {
                         console.log(222);
-                        res.status(200)
-                            .json({
+                        res.status(200).json({
                             status: 200,
                             cause: "no data was changed",
                         });
@@ -156,20 +157,18 @@ class DoctorController {
                                     jwt.verify(token, secret, (err, decoded) => {
                                         console.log(`this is decoded\n ${decoded}\n----------`);
                                     });
-                                    res.status(200)
-                                        .json({
+                                    res.status(200).json({
                                         token: token,
                                         status: 200,
                                         cause: "fileds updated",
-                                        return_data: new_user_data
+                                        return_data: new_user_data,
                                     });
                                 });
                             }
                             else {
-                                res.status(401)
-                                    .json({
+                                res.status(401).json({
                                     status: 401,
-                                    cause: "failed to updated"
+                                    cause: "failed to updated",
                                 });
                             }
                         });
@@ -177,11 +176,10 @@ class DoctorController {
                 }
                 else {
                     // internal server error
-                    res.status(500)
-                        .json({
+                    res.status(500).json({
                         status: 500,
                         cause: "user not found",
-                        error_message: err
+                        error_message: err,
                     });
                 }
             }).lean();
@@ -206,28 +204,31 @@ class DoctorController {
             const token = req.body.token;
             jwt.verify(req.body.token, secret, (err, decoded) => {
                 if (decoded) {
-                    const id = decoded['_doc']._id;
-                    offline_date_1.default.updateOne({ "docotrId": `${id}` }, { $pull: { "offline_dates": { "start_date": `${sdate}`, "end_date": `${edate}` } } }).then(() => {
-                        res.status(200)
-                            .json({
+                    const id = decoded["_doc"]._id;
+                    offline_date_1.default.updateOne({ docotrId: `${id}` }, {
+                        $pull: {
+                            offline_dates: { start_date: `${sdate}`, end_date: `${edate}` },
+                        },
+                    })
+                        .then(() => {
+                        res.status(200).json({
                             status: 200,
-                            cause: "new date added "
+                            cause: "new date added ",
                         });
-                    }).catch((err) => {
-                        res.status(500)
-                            .json({
+                    })
+                        .catch((err) => {
+                        res.status(500).json({
                             status: 500,
                             cause: "faild to add dates",
-                            error_message: err
+                            error_message: err,
                         });
                     });
                 }
                 else {
-                    res.status(500)
-                        .json({
+                    res.status(500).json({
                         status: 500,
                         cause: "token invalid",
-                        error_message: err
+                        error_message: err,
                     });
                 }
             });
@@ -237,44 +238,73 @@ class DoctorController {
             jwt.verify(token, secret, (err, decoded) => {
                 if (decoded) {
                     const id = decoded["_doc"]._id;
-                    doctor_calender_1.default.findOne({ "doctor_id": id }, (err, data) => {
+                    doctor_calender_1.default.findOne({ doctor_id: id }, (err, data) => {
                         // calender for docotr exists
                         if (data) {
-                            // all is good my 
-                            res.status(200)
-                                .json({
+                            // all is good my
+                            res.status(200).json({
                                 status: 200,
                                 message: "found calender for doctor",
-                                data: data["reservations"]
+                                data: data["reservations"],
                             });
                         }
                         else {
                             if (err) {
-                                res.status(200)
-                                    .json({
+                                res.status(200).json({
                                     status: 401,
                                     message: "error while getting data",
-                                    error_message: err
+                                    error_message: err,
                                 });
                             }
                             else {
-                                res.json(200)
-                                    .json({
+                                res.json(200).json({
                                     status: 200,
                                     message: "calender emmpty",
-                                    data: []
+                                    data: [],
                                 });
                             }
                         }
                     });
                 }
                 else {
-                    res.status(200)
-                        .json({
+                    res.status(200).json({
                         status: 500,
                         message: "token invalid",
-                        error_message: err
+                        error_message: err,
                     });
+                }
+            });
+        };
+        this.get_doctor_calender_id = (req, res) => {
+            const id = req.body.token;
+            console.log(id);
+            console.log(id);
+            doctor_calender_1.default.findOne({ doctor_id: id }, (err, data) => {
+                // calender for docotr exists
+                if (data) {
+                    // all is good my
+                    console.log(data);
+                    res.status(200).json({
+                        status: 200,
+                        message: "found calender for doctor",
+                        data: data["reservations"],
+                    });
+                }
+                else {
+                    if (err) {
+                        res.status(200).json({
+                            status: 401,
+                            message: "error while getting data",
+                            error_message: err,
+                        });
+                    }
+                    else {
+                        res.json(200).json({
+                            status: 200,
+                            message: "calender emmpty",
+                            data: [],
+                        });
+                    }
                 }
             });
         };

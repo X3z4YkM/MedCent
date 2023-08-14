@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>MedCent</title>
+  </head>
+  <body>
+    <div class="header">
+      <img
+        src="../../assets/icons/Mediamodifier-Design.svg"
+        alt="MedCent"
+        class="logo"
+      />
+      <h2 class="title_name">MedCent</h2>
+      <div class="notifications">
+        <img
+          src="../../assets/icons/MedCent Notification Bell.svg"
+          alt="Notifications"
+        />
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="table">
+        <div class="tr">
+          <img [src]="req.img_path" d.alt="+" class="user-image" />
+
+          <div class="data">
+            <div>
+              <span class="label">Firstname:</span>
+              <span>{{ req.firstname }}</span>
+            </div>
+            <div>
+              <span class="label">Lastname:</span>
+              <span>{{ req.lastname }}</span>
+            </div>
+              <div>
+                <span class="label">Address:</span>
+                <span>{{ req.address }}</span>
+              </div>
+              <div>
+                <span class="label">phone:</span>
+                <span>{{ req.mobile_phone }}</span>
+              </div>
+              <div>
+                <span class="label">Email:</span>
+                <span>{{ req.email }}</span>
+              </div>
+          </div>
+        </div>
+        <div class="services">
+          <div class="title">
+            <span class="label">Provided services:</span>
+            <hr />
+          </div>
+          <div *ngFor="let s of services" class="services_wrrapper">
+            <span class="label">Service name: {{ s.servic_name }}</span>
+            <span class="label">Service cost: {{ s.cost }}</span>
+            <span class="label">Service name: {{ s.description }}</span>
+          </div>
+        </div>
+      </div>
+      <div class="clearfix"></div>
+    </div>
+
+    <div class="container">
+      <div class="title_title">
+        <h2>What to make an appointment?</h2>
+      </div>
+      <hr />
+      <div class="selector">
+      <button class="calander_button active_select">Calander</button>
+      <button class="form_button">Form</button>
+    </div>
+      <div class="form_calendar">
+        <div id="div_chechkups" class="content">
+          <div class="containerc">
+            <div class="main">
+              <div class="month1">
+                <span id="c" class="title">Calendar<br /></span>
+
+                <span class="title2">Please choose a date<br /></span>
+              </div>
+              <div class="calendar">
+                <ul class="weekdays">
+                  <li>Su</li>
+                  <li>Mo</li>
+                  <li>Tu</li>
+                  <li>We</li>
+                  <li>Th</li>
+                  <li>Fr</li>
+                  <li>Sa</li>
+                </ul>
+                <div class="days">
+                  <ul class="days2"></ul>
+                </div>
+              </div>
+              <div class="mesec">
+                <div class="month">
+                  <img
+                    class="levo"
+                    src="../../assets//icons/levo.svg"
+                    width="20px"
+                    height="20px"
+                  />
+                </div>
+                <div class="month" id="monthID"></div>
+                <div class="month">
+                  <img
+                    class="desno"
+                    src="../../assets//icons/desno.svg"
+                    width="20px"
+                    height="20px"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-popup" id="myForm">
+          <div class="form-container">
+            <h1>Chechkups<br /></h1>
+            <p id="currDate"></p>
+
+            <div class="view_ch"></div>
+
+            <button type="button" class="btn cancel" (click)="closeForm()">
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="normal_form"></div>
+      <div class="popup-background">
+        <div class="popup-container">
+          <div class="popup-top">
+            <div class="top-image">
+              <img id="topimg" />
+            </div>
+
+            <div class="top-message">
+              <span></span>
+            </div>
+          </div>
+          <div class="popup-bottom">
+            <div class="bottom-message">
+              <pre class="preclass"><span></span></pre>
+            </div>
+            <div class="bottom-next">
+              <span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="for_cal_res_f">
+        <div class="f_title">
+          <span>Fill in the form</span>
+        </div>
+        <hr />
+        <div class="wraper_form">
+          <div class="s_title_f">
+            <span class="servic_title_span">Select service: </span>
+          </div>
+          <div class="checkbox_cla_container">
+            <div class="cehchkboxes_cal" *ngFor="let s of services">
+              {{ s.servic_name }} <input type="checkbox" />
+            </div>
+
+          </div>
+          <div class="date">
+            <span>Date: </span>
+            <input type="date" />
+          </div>
+          <div class="time_start_f">
+            <span>Time start: </span>
+            <input type="text" placeholder="time start.." />
+          </div>
+          <div class="time_end_f">
+            <span>Time end: </span>
+            <input type="text" placeholder="time start.." />
+          </div>
+          <div class="button_wraper_cal_for">
+            <div class="send">
+              <button>submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

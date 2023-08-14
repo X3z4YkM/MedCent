@@ -6,6 +6,9 @@ servicsRouter.route('/specializzazione/get').post(
 	(req, res) => new ServicsController().specializzazione_based_services(req, res)
 )
 
+servicsRouter.route('/patient/doctor/specializzazione/get').post(
+	(req, res) => new ServicsController().pet_doc_specializzazione_based_services(req, res)
+)
 servicsRouter.route('/docotr/update').post(
 	(req, res) => new ServicsController().upate_doctor(req, res)
 )
@@ -30,4 +33,9 @@ servicsRouter.route('/appointment/cancle/doctor').post(
 servicsRouter.route('/reports/user/get').post(
 	(req, res) => new ServicsController().get_all_reports_for_user(req, res)
 )
+
+servicsRouter.route('/appointment/update/date').post(
+	(req, res) => new ServicsController().update_dates(req, res)
+)
+
 export default servicsRouter

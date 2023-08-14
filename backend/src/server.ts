@@ -6,7 +6,7 @@ import userRouter from './routers/user.routes';
 import doctorRouter from './routers/doctor.router';
 import managerRouter from './routers/manager.router';
 import servicsRouter from './routers/services.router';
-
+import patientRouter from './routers/patinet.router';
 
 const app = express()
 app.use(cors())
@@ -29,7 +29,7 @@ router.use('/users', userRouter);
 router.use('/doctors', doctorRouter);
 router.use('/manager', managerRouter);
 router.use('/servics', servicsRouter)
-
+router.use('/patients', patientRouter)
 
 app.use('/',router);
 

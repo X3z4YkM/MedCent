@@ -25,4 +25,27 @@ export class PatientService {
    
     return this.http.post(`${this.uri}/users/chechk/session/expiration`, data);
   }
+
+  getPatientFromToken(token){
+    const data = {
+      token: token
+    }
+    return this.http.post(`${this.uri}/patients/get_patient`,data);
+  }
+  save_data(data, img){
+    const body = {
+      new_user_data: data,
+      img: img
+    }
+    return this.http.post(`${this.uri}/patients/update_user`, body);
+  }
+
+
+  getUserById(id){
+    const data = {
+      id: id
+    }
+    return this.http.post(`${this.uri}/patients/user/get/id`,data);
+  }
+
 }

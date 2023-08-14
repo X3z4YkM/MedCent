@@ -71,6 +71,15 @@ export class DoctorService {
     return this.http.post(`${this.uri}/doctors/calender/get`, data);
   }
 
+  get_calender_for_doctor_id(token){
+    const data = {
+      token: token
+    }
+    console.log(data)
+    return this.http.post(`${this.uri}/doctors/calender/get/id`, data);
+  }
+
+
   generate_report(report){
     const data = {
       data: report
@@ -90,6 +99,23 @@ export class DoctorService {
       id:id
     }
     return this.http.post(`${this.uri}/servics/reports/user/get`,data);
+  }
+
+  get_doctor_services_pdv(token){
+
+    const data = {
+      id: token._id
+    }
+    return this.http.post(`${this.uri}/servics/patient/doctor/specializzazione/get`,data);
+  }
+
+  get_doctor_services_update_date(date, doctor_id){
+    const data = {
+      date: date,
+      doctorid: doctor_id 
+    }
+
+    return this.http.post(`${this.uri}/servics/appointment/update/date`,data);
   }
 
 } 
