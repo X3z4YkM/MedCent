@@ -1,0 +1,179 @@
+[{
+  "_id": {
+    "$oid": "64c9919bc7f8c7ee24ce419e"
+  },
+  "firstname": "Mian",
+  "lastname": "Milanovic",
+  "username": "misko12",
+  "password": "123",
+  "address": "Ulica23",
+  "mobile_phone": "+3816512345875",
+  "email": "milan@gmail.com",
+  "type": "Patient",
+  "d_data": {
+    "number_doctor_licenc": null,
+    "specializzazione": null,
+    "office_branch": null
+  },
+  "__v": 0,
+  "img_src": "misko12.png",
+  "status": "true"
+},
+{
+  "_id": {
+    "$oid": "64cd106b6dabdd4b81784d79"
+  },
+  "firstname": "Markoo",
+  "lastname": "Mirkovic",
+  "username": "Markos23",
+  "password": "123",
+  "address": "Ulica1",
+  "mobile_phone": "+3810600310023",
+  "email": "mirdza@gmailc.om",
+  "type": "Patient",
+  "d_data": {
+    "number_doctor_licenc": null,
+    "specializzazione": null,
+    "office_branch": null
+  },
+  "img_src": "Markos23.png",
+  "__v": 0,
+  "status": "false"
+},
+{
+  "_id": {
+    "$oid": "64cd6d3a71aa1bd15da29de4"
+  },
+  "firstname": "Jovana",
+  "lastname": "Zigic",
+  "username": "jocke",
+  "password": "123",
+  "address": "Ulica 1112",
+  "email": "lazniemail3@gmail.com",
+  "d_data": {
+    "number_doctor_licenc": "1237293000452",
+    "office_branch": "general medicin",
+    "specializzazione": " cariologyist"
+  },
+  "mobile_phone": "+38164535453",
+  "type": "Doctor",
+  "img_src": "jocke.png",
+  "status": "true"
+},
+{
+  "_id": {
+    "$oid": "64cd6e9f71aa1bd15da29de5"
+  },
+  "firstname": "Zarko",
+  "lastname": "Dencic",
+  "username": "zarko00",
+  "password": "123",
+  "address": "Ulica 1112",
+  "email": "lazniemail3@gmail.com",
+  "d_data": {
+    "number_doctor_licenc": "12372930003",
+    "office_branch": "infections",
+    "specializzazione": "dermetologist"
+  },
+  "mobile_phone": "+38164535453",
+  "type": "Doctor",
+  "img_src": "zarko00.png",
+  "status": "true"
+},
+{
+  "_id": {
+    "$oid": "64cd7fcf71aa1bd15da29de6"
+  },
+  "firstname": "Milovan",
+  "lastname": "Krstic",
+  "username": "milovan23",
+  "password": "123",
+  "address": "Ulica 1112",
+  "email": "lazniemail3@gmail.com",
+  "d_data": {
+    "number_doctor_licenc": "1237293000",
+    "specializzazione": "sugen",
+    "office_branch": "neurohirug"
+  },
+  "mobile_phone": "+38164535453",
+  "type": "Doctor",
+  "img_src": "milovan23.png",
+  "status": "true"
+},
+{
+  "_id": {
+    "$oid": "64ce3c3bf8ba17dc865bb737"
+  },
+  "firstname": "Ivana",
+  "lastname": "Krstic",
+  "username": "Iksi00",
+  "password": "Some123#",
+  "address": "Ulica23",
+  "mobile_phone": "+3816523542245",
+  "email": "ivana@gmailc.com",
+  "type": "Doctor",
+  "d_data": {
+    "number_doctor_licenc": "2312871810981i",
+    "specializzazione": "astetic surgen",
+    "office_branch": "sugery"
+  },
+  "img_src": "Iksi00.png",
+  "__v": 0,
+  "status": "true"
+},
+{
+  "_id": {
+    "$oid": "64ced05c6ecba8a690face9d"
+  },
+  "firstname": "Sandara",
+  "lastname": "Lazic",
+  "username": "saki00",
+  "password": "Some123#",
+  "address": "Ulica123",
+  "mobile_phone": "+38164215515",
+  "email": "e@gmail.com",
+  "type": "Patient",
+  "d_data": {
+    "number_doctor_licenc": null,
+    "specializzazione": null,
+    "office_branch": null
+  },
+  "img_src": "saki00.png",
+  "status": "true",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64e511f57d859e0606eb74f5"
+  },
+  "firstname": "Manager",
+  "lastname": "Manageric",
+  "username": "supermanager",
+  "password": "123",
+  "address": "Ulica23",
+  "mobile_phone": "+3816412345875",
+  "email": "manager23@gmail.com",
+  "type": "Manager",
+  "status": "true"
+},
+{
+  "_id": {
+    "$oid": "64ee3facb1037a61e55ec9d5"
+  },
+  "firstname": "Ime",
+  "lastname": "Prezime",
+  "username": "kor123",
+  "password": "Some#123",
+  "address": "Ulica23",
+  "mobile_phone": "+38164524553",
+  "email": "email@gmail.com",
+  "type": "Patient",
+  "d_data": {
+    "number_doctor_licenc": null,
+    "specializzazione": null,
+    "office_branch": null
+  },
+  "img_src": "kor123.png",
+  "status": "false",
+  "__v": 0
+}]

@@ -1,0 +1,440 @@
+[{
+  "_id": {
+    "$oid": "64d6777ba631d8838b98c947"
+  },
+  "date_of_report": {
+    "$date": "2023-08-11T17:52:24.439Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "fsdf",
+  "diagnosis": "dsfdsa",
+  "therapy": "asfaf",
+  "next_session": {
+    "$date": "2023-08-23T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-09T14:30:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64d6ad8211fe2486f8c31db9"
+  },
+  "date_of_report": {
+    "$date": "2023-09-20T17:52:24.439Z"
+  },
+  "doctors_name": "Ivana  Krstic",
+  "specializzazione": "stetic surgen",
+  "reason_for_comming": "fsdf",
+  "diagnosis": "dsfdsa",
+  "therapy": "asfaf",
+  "next_session": {
+    "$date": "2023-09-23T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-09-19T14:30:00.000Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "64db49f79f0ab8d636bd1604"
+  },
+  "date_of_report": {
+    "$date": "2023-08-15T09:48:17.357Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "something",
+  "diagnosis": "something",
+  "therapy": "123",
+  "next_session": {
+    "$date": "2023-08-24T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-13T16:20:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64e4b58e81c2f5127cf7382b"
+  },
+  "date_of_report": {
+    "$date": "2023-08-22T13:17:30.535Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "mile headacwe",
+  "diagnosis": "depression",
+  "therapy": "9mm magnum",
+  "next_session": {
+    "$date": "2023-09-05T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-08T08:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64eddc3ff314793351b60a0c"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T11:53:09.256Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "gen report 233101",
+  "diagnosis": "something2323",
+  "therapy": "asdadaxczxczqwSSSS",
+  "next_session": {
+    "$date": "2023-09-06T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-08T08:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64edde2fee2d418523e8522c"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T12:01:41.042Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "112SDaDSa!!",
+  "diagnosis": "dsadasdada",
+  "therapy": "dasadsad",
+  "next_session": {
+    "$date": "2023-09-07T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-08T08:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64eddeefb3e51aafeec84c5f"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T12:04:55.036Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "@!!@1",
+  "diagnosis": "dasdasd",
+  "therapy": "asdasdas",
+  "next_session": {
+    "$date": "2023-08-31T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-08T08:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64eddfd48a6c9dc522dbe3b7"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T12:08:44.314Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "asdsadasd",
+  "diagnosis": "asdasd",
+  "therapy": "asdasda",
+  "next_session": {
+    "$date": "2023-08-30T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-08T08:00:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64ede1427fd5f451ce54d053"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T12:14:15.843Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "sqaaSAsa",
+  "diagnosis": "ASAS",
+  "therapy": "SSaSS",
+  "next_session": {
+    "$date": "2023-08-31T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-23T13:40:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64ede349dda6ffe873b6a0da"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T12:23:26.685Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "dasdasd",
+  "diagnosis": "dasdasda",
+  "therapy": "dasdadasd",
+  "next_session": {
+    "$date": "2023-08-30T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-23T13:40:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64ede44d468f849b48527d11"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T12:27:52.376Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "dsadad",
+  "diagnosis": "dasdas",
+  "therapy": "dasdas",
+  "next_session": {
+    "$date": "2023-08-31T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-23T13:40:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64ede4bb09213b8a1f40e52a"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T12:29:36.083Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "dasadas",
+  "diagnosis": "dasdasd",
+  "therapy": "asdsada",
+  "next_session": {
+    "$date": "2023-08-30T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-23T13:40:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64ede5151ac97b1bd101e0f1"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T12:29:36.083Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "dasdasda",
+  "diagnosis": "asd",
+  "therapy": "asdassda",
+  "next_session": {
+    "$date": "2023-08-30T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-23T13:40:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64ede5b074ed5ea6dda3f8cf"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T12:29:36.083Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "dasdasd",
+  "diagnosis": "asdas",
+  "therapy": "dasdas",
+  "next_session": {
+    "$date": "2023-08-30T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-23T13:40:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64ede701cdaf0104b29e927b"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T12:29:36.083Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "dasdad",
+  "diagnosis": "asdas",
+  "therapy": "dasda",
+  "next_session": {
+    "$date": "2023-08-31T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-23T13:40:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64edff57a5a19029ed5b621e"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T14:23:13.820Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "adsdasd",
+  "diagnosis": "dasdasd",
+  "therapy": "asdasd",
+  "next_session": {
+    "$date": "2023-08-30T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-23T13:40:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64ee0158d5c1299313932cc1"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T14:31:46.013Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "dasdasd",
+  "diagnosis": "asdasd",
+  "therapy": "asdasdas",
+  "next_session": {
+    "$date": "2023-08-31T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-23T13:40:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64ee01f76aab122e11e4f91b"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T14:34:15.814Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "sdasd",
+  "diagnosis": "asdas",
+  "therapy": "dasd",
+  "next_session": {
+    "$date": "2023-08-31T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-23T13:40:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64ee026e24ade89ad32352e3"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T14:36:22.456Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "dasdsad",
+  "diagnosis": "asdasdas",
+  "therapy": "dasdasd",
+  "next_session": {
+    "$date": "2023-10-05T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-23T13:40:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64ee04746aa7480094350690"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T14:44:57.760Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "dasdas",
+  "diagnosis": "asdasda",
+  "therapy": "dasasdas",
+  "next_session": {
+    "$date": "2023-08-31T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-23T13:40:00.000Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64ee054b6aa74800943506a5"
+  },
+  "date_of_report": {
+    "$date": "2023-08-29T14:48:31.074Z"
+  },
+  "doctors_name": "Milovan  Krstic",
+  "specializzazione": "sugen",
+  "reason_for_comming": "ssomething something",
+  "diagnosis": "saddada",
+  "therapy": "asdjiq2123411",
+  "next_session": {
+    "$date": "2023-09-01T00:00:00.000Z"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "date_of_schedule": {
+    "$date": "2023-08-23T13:40:00.000Z"
+  },
+  "__v": 0
+}]

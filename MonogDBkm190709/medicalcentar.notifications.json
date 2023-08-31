@@ -1,0 +1,90 @@
+[{
+  "_id": {
+    "$oid": "64dbc904f9c465322049f3d0"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "notifications": [
+    {
+      "type": "sale",
+      "service_id": "64d36ad69ff34b894d0c69ed",
+      "off": 15,
+      "seen": true,
+      "time_stamp": {
+        "$date": "2023-08-28T18:20:00.000Z"
+      }
+    },
+    {
+      "type": "cancelation",
+      "servics": "servic3",
+      "date_start": {
+        "$date": "2023-08-21T13:00:00.000Z"
+      },
+      "date_end": {
+        "$date": "2023-08-21T13:15:00.000Z"
+      },
+      "firstname": "Mian",
+      "lastname": "Milanovic",
+      "cancled_note": "123dada",
+      "seen": true,
+      "time_stamp": {
+        "$date": "2023-08-28T18:10:00.000Z"
+      }
+    },
+    {
+      "type": "cancelation",
+      "servics": "servic3",
+      "date_start": "2023-08-17T12:00:00.000Z",
+      "date_end": "2023-08-17T12:15:00.000Z",
+      "firstname": "Mian",
+      "lastname": "Milanovic",
+      "cancled_note": "notifgic testing",
+      "seen": true,
+      "time_stamp": {
+        "$date": "2023-08-28T19:20:00.000Z"
+      }
+    },
+    {
+      "type": "sale",
+      "service_id": "64d36ad69ff34b894d0c69ed",
+      "off": 15,
+      "seen": true,
+      "time_stamp": {
+        "$date": "2023-08-25T18:20:00.000Z"
+      }
+    },
+    {
+      "type": "sale",
+      "service_id": "64d36b1f9ff34b894d0c69f0",
+      "off": 20,
+      "seen": true,
+      "time_stamp": {
+        "$date": "2023-08-22T13:12:46.378Z"
+      }
+    },
+    {
+      "type": "cancelation",
+      "servics": "servic3",
+      "date_start": {
+        "$date": "2023-08-28T10:00:00.000Z"
+      },
+      "date_end": {
+        "$date": "2023-08-28T10:15:00.000Z"
+      },
+      "firstname": "Mian",
+      "lastname": "Milanovic",
+      "cancled_note": "razlog mladjan",
+      "seen": true,
+      "time_stamp": {
+        "$date": "2023-08-22T13:19:49.837Z"
+      }
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "64ee3facb1037a61e55ec9d7"
+  },
+  "patient_id": "64ee3facb1037a61e55ec9d5",
+  "notifications": [],
+  "__v": 0
+}]

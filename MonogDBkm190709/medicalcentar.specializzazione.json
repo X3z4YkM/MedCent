@@ -1,0 +1,19 @@
+[{
+  "_id": {
+    "$oid": "64dc53ce801d1a0be846d8e3"
+  },
+  "name": "new spec",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64dc54ddf9c465322049f418"
+  },
+  "name": "sugen"
+},
+{
+  "_id": {
+    "$oid": "64dc54f1f9c465322049f419"
+  },
+  "name": "cariology"
+}]

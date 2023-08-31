@@ -1,0 +1,14 @@
+[{
+  "_id": {
+    "$oid": "64d5489f049d30e85f22c67d"
+  },
+  "patient_id": "64c9919bc7f8c7ee24ce419e",
+  "record": [
+    {
+      "docotr_id": "",
+      "servics": "",
+      "description": "",
+      "date": ""
+    }
+  ]
+}]

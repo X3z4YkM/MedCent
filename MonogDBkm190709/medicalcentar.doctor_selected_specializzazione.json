@@ -1,0 +1,14 @@
+[{
+  "_id": {
+    "$oid": "64d36cec9ff34b894d0c6a0a"
+  },
+  "docotrId": "64cd7fcf71aa1bd15da29de6",
+  "services": [
+    {
+      "services_id": "64dc6545eb2eb8f228796d6e"
+    },
+    {
+      "services_id": "64e4b47881c2f5127cf73813"
+    }
+  ]
+}]

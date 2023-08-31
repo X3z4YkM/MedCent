@@ -1,0 +1,67 @@
+[{
+  "_id": {
+    "$oid": "64d36ad69ff34b894d0c69ed"
+  },
+  "servic_name": "servic1",
+  "cost": 2000,
+  "time": "00:30",
+  "description": "New service description"
+},
+{
+  "_id": {
+    "$oid": "64d36afc9ff34b894d0c69ee"
+  },
+  "servic_name": "servic2",
+  "cost": 1000,
+  "description": "New service description",
+  "time": "00:30:00"
+},
+{
+  "_id": {
+    "$oid": "64d36b1f9ff34b894d0c69f0"
+  },
+  "servic_name": "servic4",
+  "cost": 2500,
+  "description": "New service description",
+  "time": "00:25"
+},
+{
+  "_id": {
+    "$oid": "64dc190dd9e2fbf56b0e1f0d"
+  },
+  "servic_name": "servic7",
+  "cost": 2000,
+  "time": "00:20",
+  "description": "des2",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64dc6545eb2eb8f228796d6e"
+  },
+  "servic_name": "servic 8",
+  "cost": 8000,
+  "time": "00:30",
+  "description": "new servic",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64e4b47881c2f5127cf73813"
+  },
+  "servic_name": "SERVIC_MZ",
+  "cost": 2000,
+  "time": "00:20",
+  "description": "mladenoc servic",
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "64e4b78381c2f5127cf73848"
+  },
+  "servic_name": "new servic 23",
+  "cost": 3200,
+  "time": "00:45",
+  "description": "something somewthing",
+  "__v": 0
+}]

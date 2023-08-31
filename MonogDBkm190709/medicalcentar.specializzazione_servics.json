@@ -1,0 +1,20 @@
+[{
+  "_id": {
+    "$oid": "64d36b549ff34b894d0c69f3"
+  },
+  "specializzazione": "sugen",
+  "services": [
+    "64d36afc9ff34b894d0c69ee",
+    "64dc190dd9e2fbf56b0e1f0d",
+    "64dc6545eb2eb8f228796d6e",
+    "64e4b47881c2f5127cf73813",
+    "64e4b78381c2f5127cf73848"
+  ]
+},
+{
+  "_id": {
+    "$oid": "64dc3052f9c465322049f3f7"
+  },
+  "services": [],
+  "specializzazione": "cariology"
+}]
