@@ -7,17 +7,15 @@ const Schema = mongoose.Schema
 
 let Servic = new Schema({
 
-    _id: {
-		type: ObjectId
-	},
+
     servic_name: {
         type: String
     },
     cost: {
-        type: Decimal128
+        type: Number
     },
     time: {
-        type: Number
+        type: String
     },
     description:{
         type: String

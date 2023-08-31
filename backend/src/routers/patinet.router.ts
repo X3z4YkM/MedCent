@@ -15,5 +15,4 @@ patientRouter.route('/user/get/id').post(
 	(req, res) => new PatientController().getById(req,res)
 )
 
-
 export default patientRouter

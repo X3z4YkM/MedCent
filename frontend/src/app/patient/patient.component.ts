@@ -6,8 +6,9 @@ import {PatientProfileData} from '../models/patient.profile'
 import {GuestService} from '../services/guest.service';
 import {GuestDoctorInfo} from '../models/guest.doctor'
 import { ChangeDetectorRef } from '@angular/core';
-
-
+import {ReportData} from '../models/reportInputData'
+import { CalanderData } from '../models/calender.model';
+import {MyApointmentsdata} from '../models/myapoint'
 @Component({
   selector: 'app-patient',
   templateUrl: './patient.component.html',
@@ -31,24 +32,39 @@ export class PatientComponent implements OnInit, OnDestroy{
   temp: GuestDoctorInfo[]= []
   keywords:string[] = ['firstname', 'lastname', 'specializzazione', 'office_branch']
   keywords_filter:string[] = ['Filter firstname', 'Filter lastname', 'Filter specializzazione', 'Filter office_branch']
+  my_records: ReportData[] =[]
 
+  my_appoinments: MyApointmentsdata[] = []
 
-
-
-
+  my_selected_services: string[] = []
+  
+  my_notifi: any[] = []
+  
 
   ngOnInit(): void {
 
     $(document).ready(()=>{
     
-      $("#div_profile").hide()
       $("#div_noti").hide()
-   
+      $("#div_doctors").hide()
+      $("#div_app").hide()
+      $("#appoin").hide()
+
+      $("button.records").on("click", function(){
+        $("#appoin").hide()
+        $("#rec").show()
+      })
+
+      $("button.appoin").on("click", function(){
+        $("#appoin").show()
+        $("#rec").hide()
+      })
       $(".optiosn button").on("click",function(){
         var targetDiv = $(this).data("target");
         $('.active').removeClass('active')
         $(this).parent().addClass('active')
         $(".container").hide();
+        $('.containernowrap').hide()
         $("#" + targetDiv).show();
       })
 
@@ -70,35 +86,37 @@ export class PatientComponent implements OnInit, OnDestroy{
             $(".dropdown-search").addClass("active");
           }
         }
-    });
+      });
 
-    $("#header-search").on("click", function(){
-        if($(this).val() == "") {
-          $(".dropdown-search").addClass("active");    
+      $("#header-search").on("click", function(){
+          if($(this).val() == "") {
+            $(".dropdown-search").addClass("active");    
+          }
+      });
+
+      $(".option").on("click",function(){
+        const clickedOptionText = $(this).text();
+        const headerSearchText = $("#header-search").val() as string;
+        const sanitizedHeaderSearchText = headerSearchText === undefined ? "" : headerSearchText;
+        const combinedText = sanitizedHeaderSearchText + clickedOptionText;
+        $("#header-search").val(combinedText);
+        $(".dropdown-search").removeClass("active")
+      });
+      $("#header-search").on("keyup", (event)=>{
+        
+        const keyCode = event.keyCode || event.which;
+        if (keyCode === 13) {
+          this.search_doctors()
+
+        }else
+        if(keyCode === 32 && event.ctrlKey){
+          $(".dropdown-search").addClass("active");
+        }else if(keyCode == 8){
+          this.search_doctors()
+        }else if(keyCode == 27){
+          $(".dropdown-search").removeClass("active")
         }
-    });
-
-    $(".option").on("click",function(){
-      const clickedOptionText = $(this).text();
-      const headerSearchText = $("#header-search").val() as string;
-      const sanitizedHeaderSearchText = headerSearchText === undefined ? "" : headerSearchText;
-      const combinedText = sanitizedHeaderSearchText + clickedOptionText;
-      $("#header-search").val(combinedText);
-      $(".dropdown-search").removeClass("active")
-    });
-    $("#header-search").on("keyup", (event)=>{
-      
-      const keyCode = event.keyCode || event.which;
-      if (keyCode === 13) {
-        this.search_doctors()
-
-      }else
-      if(keyCode === 32 && event.ctrlKey){
-        $(".dropdown-search").addClass("active");
-      }else if(keyCode == 8){
-        this.search_doctors()
-      }
-    });
+      });
 
 
     })
@@ -109,26 +127,42 @@ export class PatientComponent implements OnInit, OnDestroy{
       this.router.navigate(['/login'])
     }
     let token = sessionStorage.getItem('user_token');
-    this.servic.getPatientFromToken(token).subscribe((data)=>{
-      if(data['status'] === 200){
-          if(data['user'].type !== 'Patient') this.router.navigate(['/'])
-          this.patient = data['user']
-          let imgP = data['image']
-          const uint8Array = new Uint8Array(imgP["data"]);
-          const base64String = btoa(String.fromCharCode(...uint8Array));
-          this.patient.edit = false;
-          this.patient.img_profile = null
-          this.patient.img_path = `data:image/png;base64,${base64String}`
-          this.patient.file = `data:image/png;base64,${base64String}`
-          this.patient.file_oup = null;
-          this.patient.file_extension = "";
-          this.patient.img_edit_status = false;
-          this.patient.edit =false
-          this.fake_patient = {... this.patient}
-      }else{
-        // to do set error baner
-      }
-})
+    Promise.all([
+      new Promise(()=>{
+        this.servic.getPatientFromToken(token).subscribe((data)=>{
+          if(data['status'] === 200){
+              if(data['user'].type !== 'Patient') this.router.navigate(['/'])
+              this.patient = data['user']
+              let imgP = data['image']
+              const uint8Array = new Uint8Array(imgP["data"]);
+              const base64String = btoa(String.fromCharCode(...uint8Array));
+              this.patient.edit = false;
+              this.patient.img_profile = null
+              this.patient.img_path = `data:image/png;base64,${base64String}`
+              this.patient.file = `data:image/png;base64,${base64String}`
+              this.patient.file_oup = null;
+              this.patient.file_extension = "";
+              this.patient.img_edit_status = false;
+              this.patient.edit =false
+              this.fake_patient = {... this.patient}
+    
+              this.servic.get_noti(token).subscribe((data) => {
+                if(data['status'] === 200){
+                  this.my_notifi = [...this.my_notifi, ...data['data']]                  
+                }
+              })
+    
+          }else{
+            if(data['message'] === 'manager'){
+                this.router.navigate(['/manager/profile'])
+            }else{
+              this.router.navigate(['/login'])
+            }
+          }
+        })
+      })
+    ])
+
 
     this.servic.get_expiration_time(sessionStorage.getItem('user_token')).subscribe((response)=>{
       let time = (response["data"].houers * 60 * 60 * 1000)+ (response["data"].minuttes*60*1000)+ (response["data"].seconds*1000)
@@ -157,6 +191,48 @@ export class PatientComponent implements OnInit, OnDestroy{
     })
 
 
+    // getting records
+      this.servic.get_my_reports(sessionStorage.getItem('user_token')).subscribe((data) => {
+        if(data['status']==200){
+            this.my_records = data['data'];
+            this.my_records.sort((a, b) => new Date(b.date_of_report).getTime() - new Date(a.date_of_report).getTime());
+            this.cdr.detectChanges()
+        }else{
+          console.log(data['error_message'])
+        }
+      })
+
+      //getting all apoinments
+      this.servic.get_my_apointments(sessionStorage.getItem('user_token')).subscribe((data) => {
+          if(data['status']==200){
+            this.my_appoinments = data['data']
+            this.my_appoinments.sort((a, b) => new Date(a.date_start).getTime() - new Date(b.date_start).getTime());
+            this.cdr.detectChanges()
+        
+            const currentDate = new Date();
+            const targetDateStart = new Date(currentDate.getTime() + (24 * 60 - 5) * 60 * 1000);
+            const targetDateEnd = new Date(currentDate.getTime() + (24 * 60 + 5) * 60 * 1000);
+            
+            const date24hAway =  this.my_appoinments.find(date => new Date(date.date_start).getTime() >= targetDateStart.getTime() && new Date(date.date_start).getTime() <= targetDateEnd.getTime()  );
+            if(date24hAway){
+              const date_start_s = new Date(date24hAway.date_start)
+            const date_end_s = new Date(date24hAway.date_end)
+              console.log(date_start_s.getDay())
+              this.my_notifi.push({
+                type: "24h",
+                seen: false,
+                servics: date24hAway.servics,
+                date_start: `${date_start_s.getFullYear()}-${date_start_s.getMonth()+1}-${date_start_s.getDate()}  ${date_start_s.getHours()}:${date_start_s.getMinutes()}:00`,
+                date_end: `${date_end_s.getFullYear()}-${date_end_s.getMonth()+1}-${date_end_s.getDate()}  ${date_end_s.getHours()}:${date_end_s.getMinutes()}:00`,
+                firstname: date24hAway.firstname,
+                lastname: date24hAway.lastname
+              })
+            }
+
+          }else{
+            console.log(data['error_message'])
+          }
+        })
   }
 
   ngOnDestroy() {
@@ -253,7 +329,8 @@ export class PatientComponent implements OnInit, OnDestroy{
 
   logout(){
     sessionStorage.removeItem('user_token');
-    this.router.navigate(['/'])
+    localStorage.removeItem('type');
+    this.router.navigate(['/']);
   }
 
 
@@ -432,4 +509,39 @@ export class PatientComponent implements OnInit, OnDestroy{
     localStorage.setItem('request', JSON.stringify(req));
     this.router.navigate(['/doctor_view'])
   }
+
+
+  // qr shit
+  donwload_function(report, index){
+    this.servic.download_one(report, this.patient).subscribe(data=>{
+      if(data['status']==200){
+        const QR = document.createElement('div');
+        QR.innerHTML = data['html'];
+        const parent = document.getElementById(index);
+        parent.insertAdjacentElement('afterend', QR);
+        parent.style.display = 'none'
+      }else{
+        console.log(data['err'])
+      }
+    })
+  }
+
+  download_all_function(){
+    this.servic.download_all(this.my_records, this.patient).subscribe(data=>{
+      if(data['status']==200){
+        const QR = document.createElement('div');
+        QR.innerHTML = data['html'];
+        const parent = document.getElementById('download_all');
+        parent.insertAdjacentElement('afterend', QR);
+        parent.style.display = 'none'
+      }else{
+        console.log(data['err'])
+      }
+    })
+  }
+
+
+
+
+
 }

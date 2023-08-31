@@ -55,8 +55,18 @@ export class LoginComponent implements OnInit {
   ngOnInit(): void {
     if(sessionStorage.getItem('user_token'))
     {
-      console.log("uso")
-      this.location.back()
+
+      const type = JSON.parse(localStorage.getItem('type'));
+      if(type === 'manager'){
+        this.router.navigate(['/manager/profile'])
+      }else
+      if(type === 'doctor'){
+        this.router.navigate(['/doctor'])
+      }
+      else if(type === 'patient'){
+        this.router.navigate(['/patient'])
+      }
+
     }
   }
   username: string;
@@ -79,10 +89,14 @@ export class LoginComponent implements OnInit {
         if(response['status'] == 200){
           if(response['user_status']==='true'){
             sessionStorage.setItem('user_token', response["return_token"])
-            if(response['user_type'] == 'Doctor')
+            if(response['user_type'] == 'Doctor'){
+                localStorage.setItem('type',JSON.stringify('doctor'));
               this.router.navigate(['/doctor'])
-            else
+            }
+            else{
+              localStorage.setItem('type',JSON.stringify('patient'));
               this.router.navigate(['/patient'])
+            }
           }else{
             this.error_message = "Request still panding";
             $(".popup-top").removeClass("success");

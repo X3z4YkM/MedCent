@@ -70,13 +70,22 @@ class DoctorController {
         this.getDoctor = (req, res) => {
             jwt.verify(req.body.token, secret, (err, decoded) => {
                 if (decoded) {
-                    const path_to_images = path_1.default.join(__dirname, `../../src/assets/profile_pictures/${decoded["_doc"].img_src}`);
-                    let image = fs.readFileSync(path_to_images);
-                    res.status(200).json({
-                        status: 200,
-                        user: decoded["_doc"],
-                        image: image,
-                    });
+                    if (decoded["_doc"].type === "Manager") {
+                        res.status(200).json({
+                            status: 401,
+                            message: "manager",
+                        });
+                    }
+                    else {
+                        console.log("23");
+                        const path_to_images = path_1.default.join(__dirname, `../../src/assets/profile_pictures/${decoded["_doc"].img_src}`);
+                        let image = fs.readFileSync(path_to_images);
+                        res.status(200).json({
+                            status: 200,
+                            user: decoded["_doc"],
+                            image: image,
+                        });
+                    }
                 }
                 else {
                     res.status(401).json({
@@ -296,7 +305,7 @@ class DoctorController {
                         });
                     }
                     else {
-                        res.json(200).json({
+                        res.status(200).json({
                             status: 200,
                             message: "calender emmpty",
                             data: [],

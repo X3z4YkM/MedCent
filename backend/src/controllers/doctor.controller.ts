@@ -48,18 +48,26 @@ export class DoctorController {
   getDoctor = (req: express.Request, res: express.Response) => {
     jwt.verify(req.body.token, secret, (err, decoded) => {
       if (decoded) {
-        const path_to_images = path.join(
-          __dirname,
+        if (decoded["_doc"].type === "Manager") {
+          res.status(200).json({
+            status: 401,
+            message: "manager",
+          });
+        } else {
+          console.log("23");
+          const path_to_images = path.join(
+            __dirname,
 
-          `../../src/assets/profile_pictures/${decoded["_doc"].img_src}`
-        );
-        let image = fs.readFileSync(path_to_images);
+            `../../src/assets/profile_pictures/${decoded["_doc"].img_src}`
+          );
+          let image = fs.readFileSync(path_to_images);
 
-        res.status(200).json({
-          status: 200,
-          user: decoded["_doc"],
-          image: image,
-        });
+          res.status(200).json({
+            status: 200,
+            user: decoded["_doc"],
+            image: image,
+          });
+        }
       } else {
         res.status(401).json({
           status: 401,
@@ -286,7 +294,7 @@ export class DoctorController {
       // calender for docotr exists
       if (data) {
         // all is good my
-       
+
         res.status(200).json({
           status: 200,
           message: "found calender for doctor",
@@ -300,7 +308,7 @@ export class DoctorController {
             error_message: err,
           });
         } else {
-          res.json(200).json({
+          res.status(200).json({
             status: 200,
             message: "calender emmpty",
             data: [],

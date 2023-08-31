@@ -46,4 +46,39 @@ servicsRouter.route('/appointment/cancle/patient').post(
 	(req, res) => new ServicsController().cancle_appoinment_patient(req, res)
 )
 
+servicsRouter.route('/user/get/reports').post(
+	(req, res) => new ServicsController().get_my_reports(req, res)
+)
+
+
+servicsRouter.route('/user/get/apoinments').post(
+	(req, res) => new ServicsController().get_my_apointments(req, res)
+)
+
+
+
+servicsRouter.route('/patient/download/pdf/make').post(
+	(req, res) => new ServicsController().create_one_pdf(req, res)
+)
+servicsRouter.route('/patient/download/pdf/all/make').post(
+	(req, res) => new ServicsController().create_all_pdf(req, res)
+)
+
+
+servicsRouter.route('/request/get').get(
+	(req, res) => new ServicsController().get_all_new_service(req, res)
+)
+
+servicsRouter.route('/request/get').get(
+	(req, res) => new ServicsController().get_all_new_service(req, res)
+)
+
+servicsRouter.route('/discount/add').post(
+	(req, res) => new ServicsController().add_sale_to_service(req, res)
+)
+
+servicsRouter.route('/patient/get/notifi').post(
+	(req, res) => new ServicsController().get_users_noti(req, res)
+)
+
 export default servicsRouter

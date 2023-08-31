@@ -28,6 +28,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserController = void 0;
 const user_1 = __importDefault(require("../models/user"));
+const notification_1 = __importDefault(require("../models/notification"));
 const path = __importStar(require("path"));
 const fs = __importStar(require("fs"));
 const jwt = require("jsonwebtoken");
@@ -108,6 +109,109 @@ class UserController {
             let mobile = req.body.mobile;
             let password = req.body.password;
             let street = req.body.street;
+            user_1.default.findOne({ $or: [{ username: username }, { email: email }] }, (err, user) => {
+                if (user) {
+                    res.status(400).json({
+                        status: 400,
+                        casue: "Trying to add user that exists",
+                        error_message: "User alllready exists in database",
+                    });
+                }
+                else {
+                    const imageSrc = req.body.img_src;
+                    const extension = req.body.extension;
+                    let user = null;
+                    console.log(req.body);
+                    if (imageSrc) {
+                        const path_to_images = path.join(__dirname, `../../src/assets/profile_pictures/${req.body.username}.${extension}`);
+                        console.log(path_to_images);
+                        const base64Data = imageSrc.replace(/^data:image\/png;base64,/, "");
+                        const imageBuffer = Buffer.from(base64Data, "base64");
+                        fs.writeFileSync(path_to_images, imageBuffer);
+                        user = new user_1.default({
+                            _id: new ObjectId(),
+                            username: username,
+                            lastname: surname,
+                            firstname: name,
+                            password: password,
+                            address: street,
+                            mobile_phone: mobile,
+                            email: email,
+                            type: "Patient",
+                            status: false,
+                            d_data: {
+                                number_doctor_licenc: null,
+                                specializzazione: null,
+                                office_branch: null,
+                            },
+                            img_src: `${username}.${extension}`,
+                        });
+                    }
+                    else {
+                        user = new user_1.default({
+                            _id: new ObjectId(),
+                            username: username,
+                            lastname: surname,
+                            firstname: name,
+                            password: password,
+                            address: street,
+                            mobile_phone: mobile,
+                            email: email,
+                            type: "Patient",
+                            d_data: {
+                                number_doctor_licenc: null,
+                                specializzazione: null,
+                                office_branch: null,
+                            },
+                            status: false,
+                            img_src: "generic_avatar.jpg",
+                        });
+                    }
+                    user.save((err, user) => {
+                        if (user) {
+                            let new_entry = new notification_1.default({
+                                patient_id: user._id,
+                                notifications: []
+                            });
+                            new_entry.save((err, not) => {
+                                if (not) {
+                                    res.status(200).json({
+                                        status: 200,
+                                        response_message: "User was successfully added",
+                                        username: username,
+                                    });
+                                }
+                                else {
+                                    res.status(200).json({
+                                        status: 400,
+                                        casue: "Trying to add user/notification to the database",
+                                        error_message: err,
+                                    });
+                                }
+                            });
+                        }
+                        else {
+                            res.status(400).json({
+                                status: 400,
+                                casue: "Trying to add user to the database",
+                                error_message: err,
+                            });
+                        }
+                    });
+                }
+            });
+        };
+        this.register_doctor = (req, res) => {
+            let username = req.body.username;
+            let name = req.body.name;
+            let surname = req.body.surname;
+            let email = req.body.email;
+            let mobile = req.body.mobile;
+            let password = req.body.password;
+            let street = req.body.street;
+            let number_licenc = req.body.number_licenc;
+            let office_branch = req.body.office_branch;
+            let specializzation = req.body.specializzation;
             user_1.default.findOne({ username: username }, (err, user) => {
                 if (user) {
                     res.status(400).json({
@@ -128,6 +232,7 @@ class UserController {
                         const imageBuffer = Buffer.from(base64Data, "base64");
                         fs.writeFileSync(path_to_images, imageBuffer);
                         user = new user_1.default({
+                            _id: new ObjectId(),
                             username: username,
                             lastname: surname,
                             firstname: name,
@@ -135,18 +240,19 @@ class UserController {
                             address: street,
                             mobile_phone: mobile,
                             email: email,
-                            type: "Patient",
+                            type: "Doctor",
                             status: false,
                             d_data: {
-                                number_doctor_licenc: null,
-                                specializzazione: null,
-                                office_branch: null,
+                                number_doctor_licenc: number_licenc,
+                                specializzazione: specializzation,
+                                office_branch: office_branch,
                             },
                             img_src: `${username}.${extension}`,
                         });
                     }
                     else {
                         user = new user_1.default({
+                            _id: new ObjectId(),
                             username: username,
                             lastname: surname,
                             firstname: name,
@@ -154,11 +260,11 @@ class UserController {
                             address: street,
                             mobile_phone: mobile,
                             email: email,
-                            type: "Patient",
+                            type: "Doctor",
                             d_data: {
-                                number_doctor_licenc: null,
-                                specializzazione: null,
-                                office_branch: null,
+                                number_doctor_licenc: number_licenc,
+                                specializzazione: specializzation,
+                                office_branch: office_branch,
                             },
                             status: false,
                             img_src: "generic_avatar.jpg",
@@ -166,10 +272,25 @@ class UserController {
                     }
                     user.save((err, user) => {
                         if (user) {
-                            res.status(200).json({
-                                status: 200,
-                                response_message: "User was successfully added",
-                                username: username,
+                            let new_entry = new notification_1.default({
+                                patient_id: user._id,
+                                notifications: []
+                            });
+                            new_entry.save((err, not) => {
+                                if (not) {
+                                    res.status(200).json({
+                                        status: 200,
+                                        response_message: "User was successfully added",
+                                        username: username,
+                                    });
+                                }
+                                else {
+                                    res.status(200).json({
+                                        status: 400,
+                                        casue: "Trying to add user/notification to the database",
+                                        error_message: err,
+                                    });
+                                }
                             });
                         }
                         else {

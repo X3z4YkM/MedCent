@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import {GuestService} from '../services/guest.service';
 import * as $ from "jquery";
 import { Router } from '@angular/router';
@@ -19,7 +19,7 @@ export class GuestComponent implements OnInit, OnDestroy{
   keywords:string[] = ['firstname', 'lastname', 'specializzazione']
   keywords_filter:string[] = ['Filter firstname', 'Filter lastname', 'Filter specializzazione']
 
-  constructor(private router: Router, private servic: GuestService) {
+  constructor(private router: Router, private servic: GuestService,  private cdr: ChangeDetectorRef) {
     
     $(document).ready(function(){
       $(".flex_container").on("click",()=>{
@@ -79,7 +79,10 @@ export class GuestComponent implements OnInit, OnDestroy{
     {
       this.servic.chechk_token(sessionStorage.getItem('user_token')).subscribe((data)=>{
         if(data['status']==200){
-            this.router.navigate([`${data['type'].toLowerCase()}`])
+          const type = data['type'].toLowerCase()
+            this.router.navigate([`/${type}`])
+        }else{
+          console.log(data['error_message'])
         }
       })
     }
@@ -95,6 +98,7 @@ export class GuestComponent implements OnInit, OnDestroy{
           doc.img_profile = null
       });
       this.temp = this.doctors.map(elem=>elem)
+      this.cdr.detectChanges()
     })
 
 
@@ -127,6 +131,8 @@ export class GuestComponent implements OnInit, OnDestroy{
         $(".dropdown-search").addClass("active");
       }else if(keyCode == 8){
         this.search_doctors()
+      }else if(keyCode == 27){
+        $(".dropdown-search").removeClass("active")
       }
     });
 

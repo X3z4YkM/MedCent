@@ -80,9 +80,10 @@ export class DoctorService {
   }
 
 
-  generate_report(report){
+  generate_report(element, report){
     const data = {
-      data: report
+      data: report,
+      my_ap: element
     }
     return this.http.post(`${this.uri}/servics/report/generate`,data);
   }

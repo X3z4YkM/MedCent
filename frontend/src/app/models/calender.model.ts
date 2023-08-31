@@ -10,4 +10,7 @@ export class CalanderData{
     status: string;
     cancled: boolean;
     cancled_note: string;
+    sugger0: string;
+    sugger1: string;
+    sugger2: string
 }

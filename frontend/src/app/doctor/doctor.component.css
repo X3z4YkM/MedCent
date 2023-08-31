@@ -63,6 +63,9 @@ body {
 
   z-index: 2;
 }
+.option_logout{
+  margin-left: 40px;
+}
 
 .optiosn button {
   margin-right: 25px;
@@ -94,6 +97,52 @@ body {
 
   box-shadow: 5px 0px 20px rgba(64, 64, 64, 0.493);
   overflow-y: scroll;
+}
+.container2 {
+  margin-top: 1%;
+  display: flex;
+  width: 1700px;
+  margin-left: 100px;
+  max-height: 100%;
+  background-color: #fcfcfc;
+  padding: 50px 77px;
+  border-radius: 30px;
+
+  box-shadow: 5px 0px 20px rgba(64, 64, 64, 0.493);
+  overflow-y: scroll;
+}
+
+
+.container_nowrap {
+  margin-top: 1%;
+  width: 1700px;
+  margin-left: 100px;
+  max-height: 100%;
+  background-color: #fcfcfc;
+  padding: 50px 77px;
+  border-radius: 30px;
+
+  box-shadow: 5px 0px 20px rgba(64, 64, 64, 0.493);
+  overflow-y: scroll;
+}
+
+.mini_con2{
+  margin-left: 5px;
+  width: 310px;
+  height: 500px;
+  margin-top: 1%;
+  margin-bottom: 1%;
+  background-color: white;
+  padding: 10px 77px;
+  border-radius: 30px;
+
+  box-shadow: 5px 0px 20px rgba(64, 64, 64, 0.158);
+  overflow-y: scroll;
+  font-size: 15px;
+  border:  1px solid #1a3b61;
+}
+#div_chechkups.mini_con{
+  margin-left: 20px;
 }
 
 .tr {
@@ -550,8 +599,8 @@ background-color: #f0f5f5;
 
   
   border-radius: 30px;
-
-  box-shadow: 5px 0px 20px rgba(64, 64, 64, 0.1);
+  border: 1px solid #1a3b61;
+  box-shadow: 5px 0px 20px rgba(64, 64, 64, 0.24);
 
     
 }
@@ -664,8 +713,8 @@ height: 500px;
   .form-popup {
     display: none;
     position: fixed;
-    bottom: 20%;
-    right: 39.5%;
+    bottom: 150px;
+    right: 600px;
     border: 2px  rgb(189, 186, 186);
     z-index: 9;
     border-radius: 3px;

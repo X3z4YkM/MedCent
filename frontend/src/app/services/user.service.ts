@@ -24,7 +24,9 @@ export class UserService{
   register(data){
     return this.http.post(`${this.uri}/users/register/patient`, data);
   }
-
+  register_doctor(data){
+    return this.http.post(`${this.uri}/users/register/doctor`, data);
+  }
   upload_img(img_src, file_extension, username){
     const data = {
       img_src: img_src,

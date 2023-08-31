@@ -1,0 +1,155 @@
+
+<div class="content">
+    <div class="sign-up-form">
+        <div class="title">Sign Up as a Doctor</div>
+
+        <form action="#">
+            <div class="user-details container">
+                <hr style="border-top:2px solid #e6e6e6">
+                <div class="section">
+
+                    <div class="avatar-container">
+                        <div class="image-container" *ngIf="file; else placeholder"
+                        [ngStyle]="{backgroundImage: 'url(' + file + ')'}">
+                        </div>
+                    
+                        <ng-template #placeholder>
+                            <div class="image-container avatar-placeholder">
+                            </div>
+                        </ng-template>
+                    
+                        <label for="avatar-input-file">
+                            <div class="icon-wrapper">
+                                <input type="file" id="avatar-input-file" accept="image/*" (change)="onFileChange($event)" />
+                                <mat-icon class="icon" fontIcon="edit">edit</mat-icon>
+                            </div>
+                        </label>
+                    
+                    </div>
+                    <div class="row">
+                        <div class="input-box col-6">
+                        <div class="dropdown-select" tabindex="-1">
+                        <div class="select-btn">
+                            <span id="s1">Specializzazione</span>
+                            <img src="../../assets/icons/MedCent Caret.svg" alt="+" />
+                        </div>
+                        <div class="dropdown-content">
+                            <ul class="options" name="s1" *ngFor="let t of all_spec">
+                            <li id="{{ t.id }}" (click)="li_cange(t.id)">{{ t.name }}</li>
+                            </ul>
+                        </div>
+                        </div>
+                    </div>
+
+                    </div>
+                    <div class="row">
+                        <div class="input-box col-6">
+                            <input type="text" class="username" id="username" placeholder="Username">
+                        </div>
+                        <div class="input-box col-6">
+                            <input type="text" class="address" id="address" placeholder="Address">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-box col-6">
+                            <input type="text" class="name" id="name" placeholder="Name">
+                        </div>
+                        <div class="input-box col-6">
+                            <input type="text" class="phone" id="phone" placeholder="+381">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="input-box col-6">
+                            <input type="text" class="surname" id="surname" placeholder="Surname">
+                        </div>
+                        <div class="input-box col-6">
+                            <input type="text" class="email" id="email" placeholder="E-mail">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="input-box col-6">
+                            <input type="number" min="1" class="num_doc_lic" id="num_doc_lic" placeholder="number doctor licenc">
+                        </div>
+                        <div class="input-box col-6">
+                            <input type="text" class="office_branch" id="office_branch" placeholder="Office branch">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="section">
+                    <div class="row">
+                        <div class="input-box col-6">
+                            <input type="password" class="password" id="password" placeholder="Password">
+                        </div>
+                        <div class="input-box col-6">
+                            <input type="password" class="password_confirm" id="password_confirm" placeholder="Confirm your password">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="help col-12">
+                            <span>Need a help? Click here!</span>
+                        </div>
+                    </div>
+                </div>
+                <hr style="border-top:2px solid #e6e6e6">
+                <div class="button">
+                <input type="button" value="Sign Up" (click)="registerUser()">
+                </div>
+           
+
+            </div>
+
+
+            <div class="popup-background">
+                <div class="popup-container">
+                    <div class="popup-top">
+                        <div class="top-image">
+                            <img>
+                        </div>
+
+                        <div class="top-message">
+                            <span></span>
+                        </div>
+                    </div>
+                    <div class="popup-bottom">
+                        <div class="bottom-message">
+                            <pre class="preclass"><span></span></pre>
+                        </div>
+                        <div class="bottom-next">
+                            <span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="help-background">
+                <div class="help-container">
+                    <div class="help-c">
+                        <div class="help-message">
+                            <span>-Username must contain a letter as a first character and letters, numbers or underscores.</span><br>
+                            <br><span>-Name must have a capital letter, followed by 1-15 lowercase letters.</span><br>
+                            <br><span>-Surname must have a capital letter, followed by 1-15 lowercase letters.</span><br>
+                            <br><span>-E-mail must be in an e-mail form (abc@def.com).</span><br>
+                            <br><span>-Password must contain at least one uppercase letter, lowercase letter, number, symbols: !@#$%^&*</span><br>
+                            <br><span>-Password must start with a uppercase letter</span><br>
+                            <br><span>-Phone must start with +381 or a 06</span><br>
+                            <br><span>-Password must not have 2 same ajesent letters</span><br>
+                            <br><span>-Minimal password length is 8 characters!</span><br>
+                            <br><span>-Maximum password length is 14 characters!</span><br>
+                            <br><span>-Profile image must be 100x100px or 300x300px</span><br>
+                        </div>
+                        <div class="help-next">
+                            <span>Fill the form</span>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+
+    </div>
+</div>

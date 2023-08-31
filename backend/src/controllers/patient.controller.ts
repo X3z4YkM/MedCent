@@ -17,7 +17,13 @@ export class PatientController {
         jwt.verify(req.body.token, secret, (err, decoded) => {
             
             if(decoded){
-      
+                    if(decoded["_doc"].type === 'Manager'){
+                        res.status(200).json({
+                            status: 401,
+                            message:"manager"
+                        }); 
+                        return
+                    }
                 const path_to_images = path.join(
                     __dirname,
             

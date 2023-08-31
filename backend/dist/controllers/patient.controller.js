@@ -38,6 +38,13 @@ class PatientController {
         this.getPatient = (req, res) => {
             jwt.verify(req.body.token, secret, (err, decoded) => {
                 if (decoded) {
+                    if (decoded["_doc"].type === 'Manager') {
+                        res.status(200).json({
+                            status: 401,
+                            message: "manager"
+                        });
+                        return;
+                    }
                     const path_to_images = path_1.default.join(__dirname, `../../src/assets/profile_pictures/${decoded["_doc"].img_src}`);
                     let image = fs.readFileSync(path_to_images);
                     res.status(200).json({

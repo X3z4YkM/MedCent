@@ -9,6 +9,10 @@ userRouter.route('/login').post(
 userRouter.route('/register/patient').post(
 	(req, res) => new UserController().register_patient(req, res)
 )
+userRouter.route('/register/doctor').post(
+	(req, res) => new UserController().register_doctor(req, res)
+)
+
 
 userRouter.route('/img/save').post(
 	(req, res) => new UserController().set_profile_img(req, res)

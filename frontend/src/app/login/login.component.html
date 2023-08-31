@@ -1,74 +1,86 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<title>StudNet</title>
-
-</head>
-<body>
+  <head>
+    <title>StudNet</title>
+  </head>
+  <body>
     <div class="content">
-        <div class="container">
-            <div class="title">Log Into MedCent</div>
-            <hr style="border-top:2px solid #e6e6e6">
-                <div class="user-details">
-
-                    <div class="section">
-                      <div class="">
-                      <div class="input-box col-6">
-                                <div class="dropdown-select" tabindex="-1" >
-                                    <div class="select-btn">
-                                            <span id="s1">Login as</span>
-                                            <img src="../../assets/icons/MedCent Caret.svg" alt="+">
-                                    </div>
-                                    <div class="dropdown-content">
-                                        <ul class="options" name ="s1">
-                                          <li id="1">Doctor</li>
-                                          <li id="2">Patient</li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </div>                      </div>
-                        <div class="row">
-                            <div class="input-box col-12">
-                                <input type="text" class="username" id="username" placeholder="Username" [(ngModel)]="username" >
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="input-box col-12">
-                                <input type="password" class="password" id="password" placeholder="Password" [(ngModel)]="password">
-                            </div>
-                        </div>
-                    </div>
+      <div class="container">
+        <div class="title">Log Into MedCent</div>
+        <hr style="border-top: 2px solid #e6e6e6" />
+        <div class="user-details">
+          <div class="section">
+            <div class="">
+              <div class="input-box col-6">
+                <div class="dropdown-select" tabindex="-1">
+                  <div class="select-btn">
+                    <span id="s1">Login as</span>
+                    <img src="../../assets/icons/MedCent Caret.svg" alt="+" />
+                  </div>
+                  <div class="dropdown-content">
+                    <ul class="options" name="s1">
+                      <li id="1">Doctor</li>
+                      <li id="2">Patient</li>
+                    </ul>
+                  </div>
                 </div>
-                <div class="button">
-                    <input type="submit"  value="Log in" (click)="login()">
-                </div>
-                <div class="redirect">
-                    Don't have an account?
-                    <a routerLink="../register"  routerLinkActive="active">Register here</a>
-                </div>
-
-                <div class="popup-background">
-                    <div class="popup-container">
-                        <div class="popup-top">
-                            <div class="top-image">
-                                <img src="">
-                            </div>
-                            <div class="top-message">
-                                <span>Sorry you can't log in...</span>
-                            </div>
-                        </div>
-                        <div class="popup-bottom">
-                            <div class="bottom-message">
-                                <pre><span>You must enter first</span></pre>
-                            </div>
-                            <div class="bottom-next">
-                                <span>Redirect</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-box col-12">
+                <input
+                  type="text"
+                  class="username"
+                  id="username"
+                  placeholder="Username"
+                  [(ngModel)]="username"
+                />
+              </div>
+            </div>
+            <div class="row">
+              <div class="input-box col-12">
+                <input
+                  type="password"
+                  class="password"
+                  id="password"
+                  placeholder="Password"
+                  [(ngModel)]="password"
+                />
+              </div>
+            </div>
+          </div>
         </div>
+        <div class="button">
+          <input type="submit" value="Log in" (click)="login()" />
+        </div>
+        <div class="redirect">
+          Don't have an account?
+          <a routerLink="../register" routerLinkActive="active"
+            >Register here</a
+          >
+        </div>
+
+        <div class="popup-background">
+          <div class="popup-container">
+            <div class="popup-top">
+              <div class="top-image">
+                <img src="" />
+              </div>
+              <div class="top-message">
+                <span>Sorry you can't log in...</span>
+              </div>
+            </div>
+            <div class="popup-bottom">
+              <div class="bottom-message">
+                <pre><span>You must enter first</span></pre>
+              </div>
+              <div class="bottom-next">
+                <span>Redirect</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

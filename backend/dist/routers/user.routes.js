@@ -8,6 +8,7 @@ const user_controller_1 = require("../controllers/user.controller");
 const userRouter = express_1.default.Router();
 userRouter.route('/login').post((req, res) => new user_controller_1.UserController().login(req, res));
 userRouter.route('/register/patient').post((req, res) => new user_controller_1.UserController().register_patient(req, res));
+userRouter.route('/register/doctor').post((req, res) => new user_controller_1.UserController().register_doctor(req, res));
 userRouter.route('/img/save').post((req, res) => new user_controller_1.UserController().set_profile_img(req, res));
 userRouter.route('/img/get').post((req, res) => new user_controller_1.UserController().get_profile_img(req, res));
 userRouter.route('/chechk/session/expiration').post((req, res) => new user_controller_1.UserController().get_expr_status(req, res));

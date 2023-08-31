@@ -74,5 +74,43 @@ export class PatientService {
     return this.http.post(`${this.uri}/servics/appointment/cancle/patient`,data);
   }
 
+  get_my_reports(token){
+    const data = {
+      token: token
+    }
+    return this.http.post(`${this.uri}/servics/user/get/reports`, data)
+  }
+  get_my_apointments(token){
+    const data = {
+      token: token
+    }
+    return this.http.post(`${this.uri}/servics/user/get/apoinments`, data)
+  }
+  download_one(report, patient){
+    const data = {
+      id: report._id,
+      data: report,
+      me: patient
+    }
+    return this.http.post(`${this.uri}/servics/patient/download/pdf/make`, data)
+  }
+  
+  download_all(report, patient){
+    const data = {
+      id: report._id,
+      data: report,
+      me: patient
+    }
+    return this.http.post(`${this.uri}/servics/patient/download/pdf/all/make`, data)
+  }
+
+  get_noti(token){
+    const data = {
+      token: token
+    }
+    return this.http.post(`${this.uri}/servics/patient/get/notifi`, data)
+
+  }
+
 
 }

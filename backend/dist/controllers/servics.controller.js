@@ -21,6 +21,13 @@ const offline_date_1 = __importDefault(require("../models/offline_date"));
 const services_request_new_servic_1 = __importDefault(require("../models/services.request_new_servic"));
 const report_1 = __importDefault(require("../models/report"));
 const doctor_calender_1 = __importDefault(require("../models/doctor.calender"));
+const path_1 = __importDefault(require("path"));
+const fs_1 = __importDefault(require("fs"));
+const jspdf_1 = require("jspdf");
+const qrcode = require('qrcode-generator');
+const { createCanvas } = require('canvas');
+const nodemailer = require('nodemailer');
+const notification_1 = __importDefault(require("../models/notification"));
 class ServicsController {
     constructor() {
         this.specializzazione_based_services = (req, res) => __awaiter(this, void 0, void 0, function* () {
@@ -424,6 +431,11 @@ class ServicsController {
         };
         this.generate_report = (req, res) => {
             const data = req.body.data;
+            const my_a = req.body.my_ap;
+            my_a.date_start = new Date(my_a.date_start);
+            my_a.date_end = new Date(my_a.date_end);
+            my_a.status = "finished";
+            my_a.doctorts_note = true;
             const report = new report_1.default({
                 date_of_report: data["date_of_report"],
                 doctors_name: data["doctors_name"],
@@ -435,31 +447,70 @@ class ServicsController {
                 patient_id: data["patient_id"],
                 date_of_schedule: data["date_of_schedule"]
             });
+            console.log("#######");
+            console.log(my_a);
+            console.log("#######");
             console.log(data);
             console.log(report);
             report.save((err, datas) => {
                 if (datas) {
-                    console.log("sa");
+                    console.log("generate_report");
                     // update doctors calander
-                    doctor_calender_1.default.findOneAndUpdate({
-                        doctor_id: data['doctor_id'],
-                        'reservations.patient_id': data['patient_id'],
-                        'reservations.date_start': new Date(data['date_of_schedule']),
-                    }, {
-                        $set: { 'reservations.$.doctorts_note': true }
-                    }, (err, dataf) => {
-                        console.log(dataf);
-                        if (err) {
-                            res.status(200)
-                                .json({
-                                status: 401,
-                                error_message: err
-                            });
-                        }
-                        else if (dataf) {
-                            res.status(200)
-                                .json({
-                                status: 200
+                    // Calender.findOneAndUpdate(
+                    // {
+                    //     doctor_id: data['doctor_id'],
+                    //     'reservations.patient_id': data['patient_id'],
+                    //     'reservations.date_start': new Date(data['date_of_schedule']),
+                    // },
+                    // {
+                    // $set: { 'reservations.$.doctorts_note': true }
+                    // }, (err, dataf)=>{
+                    //     console.log(dataf)
+                    //     if(err){
+                    //         res.status(200)
+                    //         .json({
+                    //             status: 401,
+                    //             error_message: err
+                    //         })
+                    //     }else
+                    //         if(dataf){
+                    //             res.status(200)
+                    //             .json({
+                    //                 status: 200
+                    //             })
+                    //         }
+                    // })
+                    doctor_calender_1.default.findOne({ doctor_id: data['doctor_id'] }, (err, dataFind) => {
+                        if (dataFind) {
+                            console.log(dataFind);
+                            let temp_array = [];
+                            temp_array = dataFind['reservations'].filter(elem => new Date(elem.date_start).getDate() != new Date(my_a['date_start']).getDate());
+                            console.log('---_$------');
+                            console.log(temp_array.length);
+                            console.log('---_$------');
+                            temp_array.push(my_a);
+                            doctor_calender_1.default.updateOne({ doctor_id: data['doctor_id'] }, { $set: { reservations: temp_array } }, (err, data) => {
+                                if (data) {
+                                    let reportObj = new report_1.default(report);
+                                    delete reportObj._id;
+                                    delete reportObj.__v;
+                                    console.log(reportObj);
+                                    reportObj.save();
+                                    res.status(200)
+                                        .json({
+                                        staus: 200
+                                    });
+                                }
+                                else {
+                                    console.log('error');
+                                    if (err) {
+                                        res.status(400)
+                                            .json({
+                                            status: 400,
+                                            error_message: err
+                                        });
+                                    }
+                                }
                             });
                         }
                     });
@@ -476,6 +527,7 @@ class ServicsController {
         };
         this.cancle_appoinment_docotr = (req, res) => {
             const data = req.body.data;
+            const patient_id = data['patient_id'];
             console.log(data);
             const query = {
                 doctor_id: data['doctor_id'],
@@ -512,10 +564,15 @@ class ServicsController {
                     else {
                         // Update the removed element and re-insert it back into the array
                         console.log("some shit");
-                        const removedReservation = removedData.reservations[0];
+                        const removedReservation = data['elemnt'];
                         removedReservation.cancled = true;
                         removedReservation.status = 'cancled';
                         removedReservation.cancled_note = data['text'];
+                        removedReservation.date_start = new Date(removedReservation.date_start);
+                        removedReservation.date_end = new Date(removedReservation.date_end);
+                        console.log("---removedReservation---");
+                        console.log(removedReservation);
+                        console.log('-----------------------------');
                         doctor_calender_1.default.updateOne({ doctor_id: data['doctor_id'] }, {
                             $push: {
                                 reservations: removedReservation
@@ -523,18 +580,84 @@ class ServicsController {
                         }, (err, data) => {
                             console.log(data);
                             if (err) {
-                                res.status(401).json({
+                                res.status(200).json({
                                     status: 401,
                                     error_message: err
                                 });
                             }
                             else {
-                                res.status(200).json({
-                                    status: 200
+                                const paiload = {
+                                    type: "cancelation",
+                                    servics: removedReservation.servics,
+                                    date_start: removedReservation.date_start,
+                                    date_end: removedReservation.date_end,
+                                    firstname: removedReservation.firstname,
+                                    lastname: removedReservation.lastname,
+                                    cancled_note: removedReservation.cancled_note,
+                                    seen: false,
+                                    time_stamp: new Date()
+                                };
+                                console.log('-----notification-----');
+                                console.log(paiload);
+                                notification_1.default.updateOne({ patient_id: patient_id }, {
+                                    $push: {
+                                        notifications: paiload
+                                    }
+                                }, (err1, data) => {
+                                    if (data) {
+                                        console.log(data);
+                                        res.status(200).json({
+                                            status: 200,
+                                            data: removedReservation
+                                        });
+                                    }
+                                    else {
+                                        res.status(20).json({
+                                            status: 401,
+                                            error_message: err1
+                                        });
+                                    }
                                 });
                             }
                         });
                     }
+                }
+            });
+        };
+        this.add_sale_to_service = (req, res) => {
+            const service_id = req.body.sid;
+            const off = req.body.off;
+            console.log("-----------add_sale_to_service----------");
+            let paiload = {
+                type: "sale",
+                service_id: service_id,
+                off: off,
+                seen: false,
+                time_stamp: new Date()
+            };
+            console.log(paiload);
+            notification_1.default.find({}, (err, data) => {
+                if (data) {
+                    console.log(`----${data}-----`);
+                    const NotiPromises = data.map(user => {
+                        return notification_1.default.updateOne({
+                            patient_id: user.patient_id,
+                        }, { $push: {
+                                notifications: paiload
+                            } });
+                    });
+                    Promise.all(NotiPromises)
+                        .then(() => {
+                        console.log("uso");
+                        res.status(200).json({
+                            status: 200
+                        });
+                    })
+                        .catch(updateErrors => {
+                        res.status(200).json({
+                            status: 400
+                        });
+                    });
                 }
             });
         };
@@ -736,6 +859,402 @@ class ServicsController {
                                     status: 200
                                 });
                             }
+                        });
+                    }
+                }
+            });
+        };
+        this.get_my_reports = (req, res) => {
+            const token = req.body.token;
+            jwt.verify(req.body.token, secret, (err, decoded) => {
+                if (decoded) {
+                    const id = decoded["_doc"]._id; // my id
+                    report_1.default.find({ patient_id: id }, (err, data) => {
+                        if (data) {
+                            res.status(200)
+                                .json({
+                                status: 200,
+                                data: data
+                            });
+                        }
+                        else {
+                            res.status(200)
+                                .json({
+                                status: 401,
+                                error_message: err,
+                                data: null
+                            });
+                        }
+                    });
+                }
+                else {
+                    res.status(401).json({
+                        status: 401,
+                        error_message: err
+                    });
+                }
+            });
+        };
+        this.get_my_apointments = (req, res) => {
+            const token = req.body.token;
+            jwt.verify(req.body.token, secret, (err, decoded) => {
+                if (decoded) {
+                    const id = decoded["_doc"]._id; // my id
+                    doctor_calender_1.default.aggregate([
+                        {
+                            $match: {
+                                "reservations.patient_id": id,
+                                "reservations.cancled": false
+                            }
+                        },
+                        {
+                            $unwind: "$reservations"
+                        },
+                        {
+                            $match: {
+                                "reservations.patient_id": id
+                            }
+                        },
+                        {
+                            $addFields: {
+                                doctor_id_obj: { $toObjectId: "$doctor_id" }
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "users",
+                                localField: "doctor_id_obj",
+                                foreignField: "_id",
+                                as: "doctor"
+                            }
+                        },
+                        {
+                            $unwind: "$doctor"
+                        },
+                        {
+                            $project: {
+                                "_id": 1,
+                                "patient_id": "$reservations.patient_id",
+                                "servics": "$reservations.servics",
+                                "date_start": "$reservations.date_start",
+                                "date_end": "$reservations.date_end",
+                                "firstname": "$reservations.firstname",
+                                "lastname": "$reservations.lastname",
+                                "status": "$reservations.status",
+                                "doctorts_note": "$reservations.doctorts_note",
+                                "cancled": "$reservations.cancled",
+                                "cancled_note": "$reservations.cancled_note",
+                                "doctor_firstname": "$doctor.firstname",
+                                "doctor_lastname": "$doctor.lastname",
+                                "office_branch": "$doctor.d_data.office_branch"
+                            }
+                        }
+                    ]).exec((err, result) => {
+                        if (err) {
+                            res.status(200).json({
+                                status: 401,
+                                error_message: err
+                            });
+                        }
+                        else {
+                            res.status(200).json({
+                                status: 200,
+                                data: result
+                            });
+                        }
+                    });
+                }
+                else {
+                    res.status(401).json({
+                        status: 401,
+                        error_message: err
+                    });
+                }
+            });
+        };
+        this.create_one_pdf = (req, res) => {
+            const data = req.body.data;
+            delete data._id;
+            delete data.__v;
+            delete data.patient_id;
+            const id = req.body.id;
+            const me = req.body.me;
+            const pdf = new jspdf_1.jsPDF();
+            const email = me.email;
+            pdf.text("Generated PDF", 10, 10);
+            const fomater = JSON.stringify(data, null, 2);
+            const lines = fomater.split('\n');
+            let vp = 30;
+            lines.forEach(line => {
+                pdf.text(line, 10, vp);
+                vp += 10;
+            });
+            const path_to_pdf = path_1.default.join(__dirname, `../../src/assets/pdfs/${id}.pdf`);
+            fs_1.default.writeFileSync(path_to_pdf, pdf.output());
+            let uri = `http://localhost:4000/servics/patient/download/pdf/make?data=${path_to_pdf}`;
+            uri = 'https://youtu.be/dQw4w9WgXcQ?feature=shared&t=43';
+            const canvas = createCanvas(200, 200);
+            const qr = qrcode(0, 'H');
+            qr.addData(uri);
+            qr.make();
+            const dataUrl = qr.createDataURL(4); // Size of QR code (1 to 10)
+            const html = `<img src="${dataUrl}" alt="QR Code" width="150" height="150">`;
+            const tr = nodemailer.createTransport({
+                host: 'smtp.ethereal.email',
+                port: 587,
+                secure: false,
+                requireTLS: false,
+                auth: {
+                    user: 'lessie67@ethereal.email',
+                    pass: 'h1R3vcbhprA7k2PW6f',
+                },
+            });
+            const paiload = {
+                from: 'lessie67@ethereal.email',
+                to: email,
+                subject: 'PDF Attachment',
+                text: 'Attached is the PDF you requested.',
+                attachments: [
+                    {
+                        filename: `${id}.pdf`,
+                        path: path_to_pdf,
+                    },
+                ],
+            };
+            tr.sendMail(paiload, (error, info) => {
+                if (error) {
+                    console.error('Error sending email:', error);
+                    res.status(200).json({
+                        status: 400,
+                        err: error
+                    });
+                }
+                else {
+                    console.log('Email sent:', info.response);
+                    res.status(200)
+                        .json({
+                        status: 200,
+                        html: html
+                    });
+                }
+            });
+        };
+        this.create_all_pdf = (req, res) => {
+            const data_all = req.body.data;
+            console.log(data_all);
+            data_all.forEach(data => {
+                delete data._id;
+                delete data.__v;
+                delete data.patient_id;
+            });
+            const id = req.body.id;
+            const me = req.body.me;
+            const pdf = new jspdf_1.jsPDF();
+            const email = me.email;
+            pdf.text("Generated PDF", 10, 10);
+            data_all.forEach((data, index) => {
+                const fomater = JSON.stringify(data, null, 2);
+                const lines = fomater.split('\n');
+                let vp = 30;
+                if (index > 0) {
+                    pdf.addPage();
+                }
+                lines.forEach(line => {
+                    pdf.text(line, 10, vp);
+                    vp += 15;
+                });
+            });
+            const path_to_pdf = path_1.default.join(__dirname, `../../src/assets/pdfs/all_records.pdf`);
+            fs_1.default.writeFileSync(path_to_pdf, pdf.output());
+            const uri = `http://localhost:4000/servics/patient/download/pdf/make?data=${path_to_pdf}`;
+            const canvas = createCanvas(200, 200);
+            const qr = qrcode(0, 'H');
+            qr.addData(uri);
+            qr.make();
+            const dataUrl = qr.createDataURL(4); // Size of QR code (1 to 10)
+            const html = `<img src="${dataUrl}" alt="QR Code" width="150" height="150">`;
+            const tr = nodemailer.createTransport({
+                host: 'smtp.ethereal.email',
+                port: 587,
+                secure: false,
+                requireTLS: false,
+                auth: {
+                    user: 'lessie67@ethereal.email',
+                    pass: 'h1R3vcbhprA7k2PW6f',
+                },
+            });
+            const paiload = {
+                from: 'lessie67@ethereal.email',
+                to: email,
+                subject: 'PDF Attachment',
+                text: 'Attached is the PDF you requested.',
+                attachments: [
+                    {
+                        filename: `all_records.pdf`,
+                        path: path_to_pdf,
+                    },
+                ],
+            };
+            tr.sendMail(paiload, (error, info) => {
+                if (error) {
+                    console.error('Error sending email:', error);
+                    res.status(200).json({
+                        status: 400,
+                        err: error
+                    });
+                }
+                else {
+                    console.log('Email sent:', info.response);
+                    res.status(200)
+                        .json({
+                        status: 200,
+                        html: html
+                    });
+                }
+            });
+        };
+        this.get_all_new_service = (req, res) => {
+            services_request_new_servic_1.default.find({}, (err, data) => {
+                if (data) {
+                    res.status(200)
+                        .json({
+                        status: 200,
+                        data: data
+                    });
+                }
+                else {
+                    res.status(200)
+                        .json({
+                        status: 400,
+                        data: data
+                    });
+                }
+            });
+        };
+        this.get_users_noti = (req, res) => {
+            const token = req.body.token;
+            jwt.verify(req.body.token, secret, (err, decoded) => {
+                if (decoded) {
+                    const id = decoded["_doc"]._id; // my id
+                    // Notification.findOne(
+                    //   {patient_id: id},
+                    //   (err, data) => {
+                    //     if(data){
+                    //       const paiload = data['notifications'].sort((a, b) => {
+                    //         if (a.seen === false && b.seen === true) {
+                    //           return -1; 
+                    //       } else if (a.seen === true && b.seen === false) {
+                    //           return 1; 
+                    //       } else {
+                    //           const time_a = new Date(a.time_stamp["time_stamp"]).getTime();
+                    //           const time_b = new Date(b.time_stamp["time_stamp"]).getTime();
+                    //           return time_b - time_a; 
+                    //       }
+                    //     });
+                    //   res.status(200)
+                    //   .json({
+                    //     status:200,
+                    //     data: paiload
+                    //   })
+                    // }else{
+                    //   if(err){
+                    //     res.status(500).
+                    //     json({
+                    //       status: 500,
+                    //       error_message: err.message
+                    //     })
+                    //   }
+                    // }
+                    // }
+                    // )
+                    notification_1.default.aggregate([
+                        {
+                            $match: { "patient_id": id } // Replace with actual patient_id
+                        },
+                        {
+                            $unwind: "$notifications"
+                        },
+                        {
+                            $addFields: {
+                                "notifications.service_id": {
+                                    $cond: {
+                                        if: { $eq: ["$notifications.service_id", ""] },
+                                        then: "$notifications.service_id",
+                                        else: { $toObjectId: "$notifications.service_id" }
+                                    }
+                                }
+                            }
+                        },
+                        {
+                            $lookup: {
+                                from: "srvices",
+                                localField: "notifications.service_id",
+                                foreignField: "_id",
+                                as: "matched_services"
+                            }
+                        },
+                        {
+                            $unwind: { path: "$matched_services", preserveNullAndEmptyArrays: true }
+                        },
+                        {
+                            $sort: { "notifications.time_stamp": 1 }
+                        },
+                        {
+                            $addFields: {
+                                "notifications.matched_service_name": "$matched_services.servic_name",
+                                "notifications.matched_service_cost": "$matched_services.cost"
+                            }
+                        },
+                        {
+                            $group: {
+                                _id: {
+                                    _id: "$_id",
+                                    patient_id: "$patient_id"
+                                },
+                                notifications: { $push: "$notifications" }
+                            }
+                        },
+                        {
+                            $project: {
+                                notifications: 1
+                            }
+                        }
+                    ]).exec((err, data) => {
+                        if (data) {
+                            const updatePromises = data[0].notifications.map(n => notification_1.default.updateOne({ patient_id: id, "notifications.time_stamp": n.time_stamp }, { $set: { "notifications.$.seen": true } }));
+                            Promise.all(updatePromises)
+                                .then(results => {
+                                res.status(200)
+                                    .json({
+                                    status: 200,
+                                    data: data[0].notifications
+                                });
+                            })
+                                .catch(updateErr => {
+                                res.status(500).
+                                    json({
+                                    status: 500,
+                                    error_message: err.message
+                                });
+                            });
+                        }
+                        else {
+                            if (err) {
+                                res.status(500).
+                                    json({
+                                    status: 500,
+                                    error_message: err.message
+                                });
+                            }
+                        }
+                    });
+                }
+                else {
+                    if (err) {
+                        res.status(200).
+                            json({
+                            status: 400,
+                            error_message: "missing token"
                         });
                     }
                 }

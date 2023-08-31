@@ -920,4 +920,9 @@ export class DoctorProfileViewComponent implements OnInit, OnDestroy {
     this.selectedService = serviceId;
   }
 
+  back_to(){
+    this.router.navigate(['/patient'])
+  }
+
+
 }

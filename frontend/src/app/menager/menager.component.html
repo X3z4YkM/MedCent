@@ -1,163 +1,587 @@
-
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
-    <title>MedCent</title>
-</head>
-<body>
-    <div class="header">
-        <img src="../../assets/icons/Mediamodifier-Design.svg" alt="MedCent" class="logo">
-        <h2 class="title_name">MedCent</h2>
-        <div class="notifications">
-            <img src="../../assets/icons/MedCent Notification Bell.svg" alt="Notifications">
-        </div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <div class="dropdown-notifications">
-            <span>Patient requests</span>
-            <hr>
-            <div class="request-container">
-                <div *ngFor="let req of user_requests" class="request">
-                    <div class="request-user">
-                        <img [src]="req.img_path" alt="+">
-                        <span (click)="redirect(req)">{{req.firstname}} {{req.lastname}}</span>
-                    </div>
-                    <div class="request-buttons">
-                        <input type="button" (click)="accept(req)" value="Accept" class="request-accept">
-                        <input type="button" (click)="decline(req)" value="Decline" class="request-decline">
-                    </div>
-                    <hr/>
-                </div>
-               
-            </div>
+    <title>MedCent</title>
+  </head>
+  <body>
+    <div class="header">
+      <img
+        src="../../assets/icons/Mediamodifier-Design.svg"
+        alt="MedCent"
+        class="logo"
+      />
+      <h2 class="title_name">MedCent</h2>
+      <div class="buttons-container_app">
+        <div class="button_ca">
+          <svg
+            class="users_view"
+            xmlns="http://www.w3.org/2000/svg"
+            height="1em"
+            viewBox="0 0 512 512"
+          >
+            <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+            <style>
+              svg {
+                fill: #c2c2c2;
+              }
+            </style>
+            <path
+              d="M399 384.2C376.9 345.8 335.4 320 288 320H224c-47.4 0-88.9 25.8-111 64.2c35.2 39.2 86.2 63.8 143 63.8s107.8-24.7 143-63.8zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256zm256 16a72 72 0 1 0 0-144 72 72 0 1 0 0 144z"
+            />
+          </svg>
         </div>
+      </div>
+      <div class="notifications">
+        <img
+          src="../../assets/icons/MedCent Notification Bell.svg"
+          alt="Notifications"
+        />
+      </div>
+
+      <div class="buttons-container_app2">
+        <div class="button_ca2">
+          <svg
+            class="services_view"
+            xmlns="http://www.w3.org/2000/svg"
+            height="1em"
+            viewBox="0 0 512 512"
+          >
+            <!--! Font Awesome Free 6.4.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2023 Fonticons, Inc. -->
+            <style>
+              svg {
+                fill: #3d3d3d;
+              }
+            </style>
+            <path
+              d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM216 336h24V272H216c-13.3 0-24-10.7-24-24s10.7-24 24-24h48c13.3 0 24 10.7 24 24v88h8c13.3 0 24 10.7 24 24s-10.7 24-24 24H216c-13.3 0-24-10.7-24-24s10.7-24 24-24zm40-208a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"
+            />
+          </svg>
+        </div>
+      </div>
+
+      <div class="buttons-container">
+        <div class="button2">
+          <button class="edit2" (click)="register_doc()">register doctor</button>
+        </div>
+        <div class="button2">
+          <button class="edit2" (click)="logout()">Logout</button>
+        </div>
+      </div>
+
+
+      <div class="dropdown-notifications">
+        <span>Patient requests</span>
+        <hr />
+        <div class="request-container">
+          <div *ngFor="let req of user_requests" class="request">
+            <div class="request-user">
+              <img [src]="req.img_path" alt="+" />
+              <span (click)="redirect(req)"
+                >{{ req.firstname }} {{ req.lastname }}</span
+              >
+            </div>
+            <div class="request-buttons">
+              <input
+                type="button"
+                (click)="accept(req)"
+                value="Accept"
+                class="request-accept"
+              />
+              <input
+                type="button"
+                (click)="decline(req)"
+                value="Decline"
+                class="request-decline"
+              />
+            </div>
+            <hr />
+          </div>
+        </div>
+      </div>
     </div>
 
-    <div class="container">
-     
-        <div class="table">
-            <div *ngFor="let udata of user_data" class="tr" (mouseenter)="changeFocus(udata)">
-                
-                <img *ngIf="udata.edit != true" [src]="udata.img_path" d.alt="+" class="user-image">
+    <div id="uid" class="container">
+      <div class="table">
+        <div
+          *ngFor="let udata of user_data"
+          class="tr"
+          (mouseenter)="changeFocus(udata)"
+        >
+          <img
+            *ngIf="udata.edit != true"
+            [src]="udata.img_path"
+            d.alt="+"
+            class="user-image"
+          />
 
-                <div *ngIf="udata.edit == true " class="avatar-container">
-                    <div class="image-container" *ngIf="selected_user.file; else placeholder"
-                    [ngStyle]="{backgroundImage: 'url(' + getUser(udata).file + ')'}">
-                    </div>
-                
-                    <ng-template #placeholder>
-                        <div class="image-container avatar-placeholder">
-                        </div>
-                    </ng-template>
-                
-                    <label for="avatar-input-file">
-                        <div class="icon-wrapper">
-                            <input type="file" id="avatar-input-file" accept="image/*" (change)="onFileChange($event)" />
-                            <mat-icon class="icon" fontIcon="edit">edit</mat-icon>
-                        </div>
-                    </label>
-                
+          <div *ngIf="udata.edit == true" class="avatar-container">
+            <div
+              class="image-container"
+              *ngIf="selected_user.file; else placeholder"
+              [ngStyle]="{
+                backgroundImage: 'url(' + getUser(udata).file + ')'
+              }"
+            ></div>
+
+            <ng-template #placeholder>
+              <div class="image-container avatar-placeholder"></div>
+            </ng-template>
+
+            <label for="avatar-input-file">
+              <div class="icon-wrapper">
+                <input
+                  type="file"
+                  id="avatar-input-file"
+                  accept="image/*"
+                  (change)="onFileChange($event)"
+                />
+                <mat-icon class="icon" fontIcon="edit">edit</mat-icon>
+              </div>
+            </label>
+          </div>
+
+          <div class="data">
+            <div>
+              <span class="label">Firstname:</span>
+              <span *ngIf="udata.edit != true">{{ udata.firstname }}</span>
+              <input
+                *ngIf="udata.edit == true"
+                value="{{ udata.firstname }}"
+                placeholder="{{ udata.firstname }}"
+                [(ngModel)]="getUser(udata).firstname"
+              />
+            </div>
+            <div>
+              <span class="label">Lastname:</span>
+              <span *ngIf="udata.edit != true">{{ udata.lastname }}</span>
+              <input
+                *ngIf="udata.edit == true"
+                value="{{ udata.lastname }}"
+                placeholder="{{ udata.lastname }}"
+                [(ngModel)]="getUser(udata).lastname"
+              />
+            </div>
+            <div>
+              <span class="label">Username:</span>
+              <span *ngIf="udata.edit != true">{{ udata.username }}</span>
+              <input
+                *ngIf="udata.edit == true"
+                value="{{ udata.username }}"
+                placeholder="{{ udata.username }}"
+                [(ngModel)]="getUser(udata).username"
+              />
+            </div>
+            <div>
+              <span class="label">Password:</span>
+              <span *ngIf="udata.edit != true">{{ udata.password }}</span>
+              <input
+                *ngIf="udata.edit == true"
+                value="{{ udata.password }}"
+                placeholder="{{ udata.password }}"
+                [(ngModel)]="getUser(udata).password"
+              />
+            </div>
+            <div>
+              <span class="label">Address:</span>
+              <span *ngIf="udata.edit != true">{{ udata.address }}</span>
+              <input
+                *ngIf="udata.edit == true"
+                value="{{ udata.address }}"
+                placeholder="{{ udata.address }}"
+                [(ngModel)]="getUser(udata).address"
+              />
+            </div>
+            <div>
+              <span class="label">phone:</span>
+              <span *ngIf="udata.edit != true">{{ udata.mobile_phone }}</span>
+              <input
+                *ngIf="udata.edit == true"
+                value="{{ udata.mobile_phone }}"
+                placeholder="{{ udata.mobile_phone }}"
+                [(ngModel)]="getUser(udata).mobile_phone"
+              />
+            </div>
+            <div>
+              <span class="label">Email:</span>
+              <span *ngIf="udata.edit != true">{{ udata.email }}</span>
+              <input
+                *ngIf="udata.edit == true"
+                value="{{ udata.email }}"
+                placeholder="{{ udata.email }}"
+                [(ngModel)]="getUser(udata).email"
+              />
+            </div>
+            <div>
+              <span class="label">Role:</span>
+              <span *ngIf="udata.edit != true">{{ udata.type }}</span>
+              <input
+                *ngIf="udata.edit == true"
+                value="{{ udata.type }}"
+                placeholder="{{ udata.type }}"
+                [(ngModel)]="getUser(udata).type"
+              />
+            </div>
+            <div *ngIf="udata.type == 'Doctor'">
+              <span class="label">Doctor data:</span>
+              <div class="indent">
+                <div>
+                  <span class="label">Licenc number:</span>
+                  <span *ngIf="udata.edit != true">
+                    {{ udata.d_data["number_doctor_licenc"] }}</span
+                  >
+                  <input
+                    *ngIf="udata.edit == true"
+                    value="{{ udata.d_data['number_doctor_licenc'] }}"
+                    placeholder="{{ udata.d_data['number_doctor_licenc'] }}"
+                    [(ngModel)]="getUser(udata).d_data['number_doctor_licenc']"
+                  />
                 </div>
-
-                <div class="data" >
-                    <div>
-                        <span class="label">Firstname:</span>  
-                        <span *ngIf="udata.edit != true">{{udata.firstname}}</span>
-                        <input *ngIf="udata.edit == true" value="{{udata.firstname}}" placeholder="{{udata.firstname}}" [(ngModel)]="getUser(udata).firstname">
-                    </div>
-                    <div>
-                        <span class="label">Lastname:</span>  
-                        <span *ngIf="udata.edit != true">{{udata.lastname}}</span>
-                        <input *ngIf="udata.edit == true" value="{{udata.lastname}}" placeholder="{{udata.lastname}}" [(ngModel)]="getUser(udata).lastname">
-                    </div>
-                    <div>
-                        <span class="label">Username:</span>  
-                        <span *ngIf="udata.edit != true">{{udata.username}}</span>
-                        <input *ngIf="udata.edit == true" value="{{udata.username}}" placeholder="{{udata.username}}"[(ngModel)]="getUser(udata).username">
-                    </div>
-                    <div>
-                        <span class="label">Password:</span>  
-                        <span *ngIf="udata.edit != true">{{udata.password}}</span>
-                        <input *ngIf="udata.edit == true" value="{{udata.password}}" placeholder="{{udata.password}}" [(ngModel)]="getUser(udata).password">
-                    </div>
-                    <div>
-                        <span class="label">Address:</span>  
-                        <span *ngIf="udata.edit != true">{{udata.address}}</span>
-                        <input *ngIf="udata.edit == true" value="{{udata.address}}" placeholder="{{udata.address}}"[(ngModel)]="getUser(udata).address">
-                    </div>
-                    <div>
-                        <span class="label">phone:</span>  
-                        <span *ngIf="udata.edit != true">{{udata.mobile_phone}}</span>
-                        <input *ngIf="udata.edit == true" value="{{udata.mobile_phone}}" placeholder="{{udata.mobile_phone}}"[(ngModel)]="getUser(udata).mobile_phone">
-                    </div>
-                    <div>
-                        <span class="label">Email:</span>  
-                        <span *ngIf="udata.edit != true">{{udata.email}}</span>
-                        <input *ngIf="udata.edit == true" value="{{udata.email}}" placeholder="{{udata.email}}"[(ngModel)]="getUser(udata).email">
-                    </div>
-                    <div>
-                        <span class="label">Role:</span>  
-                        <span *ngIf="udata.edit != true">{{udata.type}}</span>
-                        <input *ngIf="udata.edit == true" value="{{udata.type}}" placeholder="{{udata.type}}" [(ngModel)]="getUser(udata).type">
-                    </div>
-                    <div *ngIf="udata.type == 'Doctor'">
-                        <span class="label">Doctor data:</span>  
-                        <div class="indent">
-                            <div>
-                                <span class="label">Licenc number:</span>  
-                                <span *ngIf="udata.edit != true"> {{udata.d_data['number_doctor_licenc']}}</span>
-                                <input *ngIf="udata.edit == true" value="{{udata.d_data['number_doctor_licenc']}}"
-                                 placeholder="{{udata.d_data['number_doctor_licenc']}}"[(ngModel)]="getUser(udata).d_data['number_doctor_licenc']">
-                            </div>
-                            <div>
-                                <span class="label">Specializzazione:</span>  
-                                <span *ngIf="udata.edit != true">{{udata.d_data['specializzazione']}}</span>
-                                <input *ngIf="udata.edit == true" value="{{udata.d_data['specializzazione']}}" 
-                                placeholder="{{udata.d_data['specializzazione']}}"[(ngModel)]="getUser(udata).d_data['specializzazione']">
-                            </div>
-                            <div>
-                                <span class="label">Office branch:</span>  
-                                <span *ngIf="udata.edit != true">{{udata.d_data['office_branch']}}</span>
-                                <input *ngIf="udata.edit == true" value="{{udata.d_data['office_branch']}}" 
-                                placeholder="{{udata.d_data['office_branch']}}"[(ngModel)]="getUser(udata).d_data['office_branch']">
-                            </div>
-                            
-                        </div>
-                       
-                    </div>
-                    <div>
-                        <span class="label">Status:</span>  
-                        <span *ngIf="udata.edit != true">{{udata.status}}</span>
-                        <input *ngIf="udata.edit == true" value="{{udata.status}}" placeholder="{{udata.status}}"[(ngModel)]="getUser(udata).status">
-                    </div>  
-
-                    <div class="buttons-container">
-                        <div *ngIf="udata.edit != true" class="button">
-                            <button class="edit" (click)="edit_mode(udata)">edit</button>
-                        </div>
-                        <div *ngIf="udata.edit == true" class="button">
-                            <button class="edit" (click)="save_mode(udata)">save</button>
-                        </div>
-                        <div *ngIf="udata.edit != true" class="button">
-                            <button class="delete">delete</button>
-                        </div>
-                        <div *ngIf="udata.edit == true" class="button">
-                            <button class="delete" (click)="view_mode(udata)" >cancle</button>
-                        </div>
-                    </div>                
+                <div>
+                  <span class="label">Specializzazione:</span>
+                  <span *ngIf="udata.edit != true">{{
+                    udata.d_data["specializzazione"]
+                  }}</span>
+                  <input
+                    *ngIf="udata.edit == true"
+                    value="{{ udata.d_data['specializzazione'] }}"
+                    placeholder="{{ udata.d_data['specializzazione'] }}"
+                    [(ngModel)]="getUser(udata).d_data['specializzazione']"
+                  />
                 </div>
-            
-        </div>
-            
-        </div>
+                <div>
+                  <span class="label">Office branch:</span>
+                  <span *ngIf="udata.edit != true">{{
+                    udata.d_data["office_branch"]
+                  }}</span>
+                  <input
+                    *ngIf="udata.edit == true"
+                    value="{{ udata.d_data['office_branch'] }}"
+                    placeholder="{{ udata.d_data['office_branch'] }}"
+                    [(ngModel)]="getUser(udata).d_data['office_branch']"
+                  />
+                </div>
+              </div>
+            </div>
+            <div>
+              <span class="label">Status:</span>
+              <span *ngIf="udata.edit != true">{{ udata.status }}</span>
+              <input
+                *ngIf="udata.edit == true"
+                value="{{ udata.status }}"
+                placeholder="{{ udata.status }}"
+                [(ngModel)]="getUser(udata).status"
+              />
+            </div>
 
+            <div class="buttons-container">
+              <div *ngIf="udata.edit != true" class="button">
+                <button class="edit" (click)="edit_mode(udata)">edit</button>
+              </div>
+              <div *ngIf="udata.edit == true" class="button">
+                <button class="edit" (click)="save_mode(udata)">save</button>
+              </div>
+              <div *ngIf="udata.edit != true" class="button">
+                <button class="delete">delete</button>
+              </div>
+              <div *ngIf="udata.edit == true" class="button">
+                <button class="delete" (click)="view_mode(udata)">
+                  cancle
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="clearfix"></div>
-    <div class="container">
+    <div id="sid" class="container">
+      <h2>New Requests:</h2>
+      <div class="container">
+        <div class="table">
+          <div *ngFor="let r of new_req_data">
+            <div *ngIf="r.requests.length > 0" class="tr">
+              <div class="data">
+                <div>
+                  <span class="label">Specializzazione:</span>
+                  <span>{{ r.specializzazione }}</span>
+                  <hr />
+                </div>
+                <div *ngFor="let re of r.requests" class="data">
+                  <div>
+                    <span class="label">Service name:</span>
+                    <span>{{ re.service_name }}</span>
+                  </div>
+                  <div>
+                    <span class="label">Service cost:</span>
+                    <span>{{ re.servic_cost }}</span>
+                  </div>
+                  <div>
+                    <span class="label">Service description:</span>
+                    <span>{{ re.service_des }}</span>
+                  </div>
+                  <div>
+                    <span class="label">Service dur:</span>
+                    <span>{{ re.service_dur }}</span>
+                  </div>
+                  <div class="buttons-container">
+                    <div class="button">
+                      <button
+                        class="edit"
+                        (click)="save_req_n(re, r.specializzazione)"
+                      >
+                        aprove
+                      </button>
+                    </div>
+                    <div class="button">
+                      <button
+                        class="delete"
+                        (click)="remove_req_n(re, r.specializzazione)"
+                      >
+                        remove
+                      </button>
+                    </div>
+                    <hr />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <h2>Add specializzazione:</h2>
+      <div class="container">
+        <div class="data">
+          <div>
+            <span class="label">Specializzazione name: </span>
+            <input type="text" [(ngModel)]="spec_name" />
+          </div>
+          <div class="buttons-container">
+            <div class="button">
+              <button class="edit" (click)="add_spec()">submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br />
+      <h2>Eddit data:</h2>
+      <div class="container_wrap">
+        <div class="table">
+          <div *ngFor="let sps of spec_ser_edit" class="tr_wrap">
+            <div class="trspeser">
+              <div>
+                <span class="label"
+                  >Specializzazione: {{ sps.specializzazione }}</span
+                >
+              </div>
+              <div class="flex_containerdoc">
+                <div
+                  *ngFor="let s of sps.all_services"
+                  class="container_table_inner"
+                >
+                  <div>
+                    <span>Service name:</span>
+                    <span *ngIf="s.edit === false">{{ s.service_name }}</span>
+                    <input
+                      *ngIf="s.edit === true"
+                      type="text"
+                      placeholder="new name.."
+                      [(ngModel)]="dummy.service_name"
+                    />
+                  </div>
+                  <div>
+                    <span>Cost: </span
+                    ><span *ngIf="s.edit === false">{{ s.cost }}</span>
+                    <input
+                      *ngIf="s.edit === true"
+                      type="text"
+                      type="number"
+                      placeholder="new cost.."
+                      [(ngModel)]="dummy.servic_cost"
+                    />
+                  </div>
+                  <div>
+                    <span> Lasts:</span
+                    ><span *ngIf="s.edit === false">{{ s.time }}</span>
+                    <input
+                      *ngIf="s.edit === true"
+                      type="text"
+                      placeholder="new time.."
+                      [(ngModel)]="dummy.service_dur"
+                    />
+                  </div>
+                  <div>
+                    <span> Description:</span>
+                    <span *ngIf="s.edit === false">{{ s.description }}</span>
+                    <input
+                      *ngIf="s.edit === true"
+                      type="text"
+                      placeholder="new description.."
+                      [(ngModel)]="dummy.service_des"
+                    />
+                  </div>
+                  <div class="buttons-container2">
+                    <div *ngIf="s.edit === false" class="button2">
+                      <button
+                        class="edit2"
+                        (click)="s.edit = true; cancle_speres()"
+                      >
+                        edit
+                      </button>
+                    </div>
+                    <div *ngIf="s.edit === true" class="button2">
+                      <button
+                        class="edit2"
+                        (click)="
+                          s.edit = false;
+                          save_specsercedit(s, sps.specializzazione)
+                        "
+                      >
+                        save
+                      </button>
+                    </div>
+                    <div *ngIf="s.edit === true" class="button2">
+                      <button
+                        class="delete2"
+                        (click)="s.edit = false; cancle_speres()"
+                      >
+                        cancle
+                      </button>
+                    </div>
+                    <div *ngIf="s.edit === false" class="button2">
+                      <button
+                        class="delete2"
+                        (click)="remove_speres(s, sps.specializzazione)"
+                      >
+                        remove
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
 
+        <h2>Add a new service</h2>
+        <div class="container">
+          <div class="input-box col-6">
+            <div class="dropdown-select" tabindex="-1">
+              <div class="select-btn">
+                <span id="s1">Specializzazione</span>
+                <img src="../../assets/icons/MedCent Caret.svg" alt="+" />
+              </div>
+              <div class="dropdown-content">
+                <ul class="options" name="s1" *ngFor="let t of all_spec">
+                  <li id="{{ t.id }}" (click)="li_cange(t.id)">{{ t.name }}</li>
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div>
+            <span>Service name:</span>
+            <input
+              type="text"
+              placeholder="new name.."
+              [(ngModel)]="dummy.service_name"
+            />
+          </div>
+          <div>
+            <span>Cost: </span>
+            <input
+              type="text"
+              type="number"
+              placeholder="new cost.."
+              [(ngModel)]="dummy.servic_cost"
+            />
+          </div>
+          <div>
+            <span> Lasts:</span>
+            <input
+              type="text"
+              placeholder="new time.."
+              [(ngModel)]="dummy.service_dur"
+            />
+          </div>
+          <div>
+            <span> Description:</span>
+
+            <input
+              type="text"
+              placeholder="new description.."
+              [(ngModel)]="dummy.service_des"
+            />
+          </div>
+          <div class="buttons-container2">
+            <div class="button2">
+              <button class="edit2" (click)="save_specsercedit2(selected_spec)">
+                save
+              </button>
+            </div>
+          </div>
+
+          <br />
+          <h2>Add a Discount</h2>
+          <div class="container">
+            <div class="input-box col-6">
+              <div class="dropdown-select" tabindex="-1">
+                <div class="select-btn">
+                  <span id="s2">Servic..</span>
+                  <img src="../../assets/icons/MedCent Caret.svg" alt="+" />
+                </div>
+                <div class="dropdown-content2">
+                  <ul class="options" name="s2" *ngFor="let t of all_servecs">
+                    <li id="{{ t.id }}" (click)="li_cange2(t.id)">
+                      {{ t.servic_name }}
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div>
+              Discount:
+              <input
+                [(ngModel)]="discount"
+                style="margin-top: 10px; margin-bottom: 10px"
+                type="number"
+                max="100"
+                min="1"
+                id=""
+              />
+            </div>
+            <div class="buttons-container2">
+              <div class="button2">
+                <button class="edit2" (click)="add_dis()">submit</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="popup-background">
+            <div class="popup-container">
+              <div class="popup-top">
+                <div class="top-image">
+                  <img id="topimg" />
+                </div>
+
+                <div class="top-message">
+                  <span></span>
+                </div>
+              </div>
+              <div class="popup-bottom">
+                <div class="bottom-message">
+                  <pre class="preclass"><span></span></pre>
+                </div>
+                <div class="bottom-next">
+                  <span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-
-</body>
+  </body>
 </html>

@@ -162,9 +162,18 @@
        
     </div>
 
-    <div  id="div_chechkups" class="container">
-        
-        <div  id="div_chechkups" class="content">
+    <div  id="div_chechkups" class="container2">
+        <div  id="div_chechkups" class="mini_con2">
+            <div class="title">
+                <span class="label">Next 3 appointments</span> 
+                <hr>
+            </div>
+            <div *ngFor=" let t of last_3">
+                <span>{{t.firstname + " "+ t.lastname}}</span> <span>{{" date: "+t.sugger0}}</span> <br> <span>{{" time: "+t.sugger1+"-"+t.sugger2}}</span>
+                <hr>
+            </div>
+        </div>
+        <div  id="div_chechkups" class="mini_con">
             <div class="containerc">
               <div class="main">
             
@@ -291,7 +300,10 @@
             <div>
                 <span class="label">Request a new servic for specializzazione {{doctor.d_data["specializzazione"]}}:</span> 
                 <hr> 
-                <input class="servic_request_input" placeholder="servic name..." [(ngModel)]="new_req">
+                <input class="servic_request_input" placeholder="servic name..." [(ngModel)]="new_req.service_name">
+                <input type="number" class="servic_request_input" placeholder="cost.." [(ngModel)]="new_req.servic_cost">
+                <input class="servic_request_input" placeholder="description..." [(ngModel)]="new_req.service_des">
+                <input class="servic_request_input" placeholder="how long..." [(ngModel)]="new_req.service_dur">
                 <div class="buttons-container">
                     <div class="button">
                         <button (click)="submit_servic_request()" class="edit">send</button>
